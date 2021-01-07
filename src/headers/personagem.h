@@ -8,6 +8,7 @@ using namespace std;
 class Personagem {
     public:
         string getNome();
+        int getCodigo();
 };
 
 #endif //TRABALHO_PRATICO_SO_SRC_HEADERS_PERSONAGEM_H

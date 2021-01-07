@@ -6,6 +6,8 @@
         "istream": "cpp",
         "functional": "cpp",
         "iostream": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "random": "cpp",
+        "vector": "cpp"
     }
 }

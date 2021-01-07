@@ -1,7 +1,7 @@
 #ifndef TRABALHO_PRATICO_SO_SRC_HEADERS_FORNO_H
 #define TRABALHO_PRATICO_SO_SRC_HEADERS_FORNO_H
 
-#include <map>
+#include <vector>
 #include <iostream>
 #include <pthread.h>
 #include "personagem.h"
@@ -13,7 +13,7 @@ class Forno {
 
     public: 
 
-        Forno(map<string, pthread_cond_t>& permissoes, pthread_mutex_t& forno);
+        Forno(vector<pthread_cond_t>& permissoes, pthread_mutex_t& forno);
 
         void esperar(Personagem p);
 
@@ -35,10 +35,13 @@ class Forno {
         bool pennyPodeUsar();
         bool stuartPodeUsar();
         bool kripkePodeUsar();
+        void atualizarCasais();
         pthread_mutex_t forno;
-        map<string, pthread_cond_t>& permissoes;
-        map<string, int> esperando;
-        map<string, bool> casalEsperando;
+        vector<pthread_cond_t>& permissoes;
+        vector<int> esperando;
+        bool casalSheldonAmy;
+        bool casalHowardBernadette;
+        bool casalLeonardPenny;
         Raj* raj;
         int contadorEspera;
         bool emUso;

@@ -1,82 +1,34 @@
 #include <iostream>
-#include <map>
+#include <vector>
 #include <pthread.h>
 #include "personagem.h"
 #include "raj.h"
 #include "forno.h"
+#include "constantes.h"
 
 using namespace std;
 
-Forno::Forno(map<string, pthread_cond_t>& permissoes, pthread_mutex_t& forno) : forno(forno), permissoes(permissoes){
+Forno::Forno(vector<pthread_cond_t>& permissoes, pthread_mutex_t& forno) : forno(forno), permissoes(permissoes){
     this->raj = new Raj(esperando, permissoes);
-    this->esperando = map<string, int>();
-    this->casalEsperando = map<string, bool>();
+    this->esperando = vector<int>(Constantes::NUMERO_PERSONAGENS);
+    this->casalSheldonAmy = false;
+    this->casalHowardBernadette = false;
+    this->casalLeonardPenny = false;
     this->contadorEspera = 1;
     this->emUso = false;
 }
 
 void Forno::esperar(Personagem p) {
     cout << p.getNome() << " quer usar o forno" << endl;
-    this->esperando[p.getNome()] = this->contadorEspera++;
+    this->esperando[p.getCodigo()] = this->contadorEspera++;
     determinarBloqueios();
-
-    if(p.getNome() == "Sheldon") {
-        this->casalEsperando["Amy"] = true;
-    }
-
-    if(p.getNome() == "Amy") {
-        this->casalEsperando["Sheldon"] = true;
-    }
-
-    if(p.getNome() == "Howard") {
-        this->casalEsperando["Bernadette"] = true;
-    }
-
-    if(p.getNome() == "Bernadette") {
-        this->casalEsperando["Howard"] = true;
-    } 
-
-    if(p.getNome() == "Leonard") {
-        this->casalEsperando["Penny"] = true;
-    }
-
-    if(p.getNome() == "Penny") {
-        this->casalEsperando["Leonard"] = true;
-    }
-
-    pthread_mutex_unlock(&forno);
 }
 
 void Forno::liberar(Personagem p) {
     cout << p.getNome() << " vai comer" << endl;
-    this->esperando[p.getNome()] = 0;
+    this->esperando[p.getCodigo()] = 0;
     determinarBloqueios();
-    if(p.getNome() == "Sheldon") {
-        this->casalEsperando["Amy"] = true;
-    }
-
-    if(p.getNome() == "Amy") {
-        this->casalEsperando["Sheldon"] = true;
-    }
-
-    if(p.getNome() == "Howard") {
-        this->casalEsperando["Bernadette"] = true;
-    }
-
-    if(p.getNome() == "Bernadette") {
-        this->casalEsperando["Howard"] = true;
-    } 
-
-    if(p.getNome() == "Leonard") {
-        this->casalEsperando["Penny"] = true;
-    }
-
-    if(p.getNome() == "Penny") {
-        this->casalEsperando["Leonard"] = true;
-    }
-
     emUso = false;
-    pthread_mutex_unlock(&forno);
 }
 
 bool Forno::pegarForno(Personagem p) {
@@ -92,35 +44,35 @@ bool Forno::verificarPermissaoParaUsarForno(Personagem p) {
         return false;
     }
 
-    if(p.getNome() == "Sheldon") {
+    if(p.getCodigo() == Constantes::SHELDON) {
         return sheldonPodeUsar();
     }
 
-    if(p.getNome() == "Amy") {
+    if(p.getCodigo() == Constantes::AMY) {
         return amyPodeUsar();
     }
 
-    if(p.getNome() == "Howard") {
+    if(p.getCodigo() == Constantes::HOWARD) {
         return howardPodeUsar();
     }
 
-    if(p.getNome() == "Bernadette") {
+    if(p.getCodigo() == Constantes::BERNADETTE) {
         return bernardettePodeUsar();
     } 
 
-    if(p.getNome() == "Leonard") {
+    if(p.getCodigo() == Constantes::LEONARD) {
         return leonardPodeUsar();
     }
 
-    if(p.getNome() == "Penny") {
+    if(p.getCodigo() == Constantes::PENNY) {
         return pennyPodeUsar();
     }
 
-    if(p.getNome() == "Stuart") {
+    if(p.getCodigo() == Constantes::STUART) {
         return stuartPodeUsar();
     }
 
-    if(p.getNome() == "Kripke") {
+    if(p.getCodigo() == Constantes::KRIPKE) {
         return kripkePodeUsar();
     }
 
@@ -133,26 +85,23 @@ void Forno::verificar() {
 }
 
 bool Forno::sheldonPodeUsar() {
-    bool casalSheldonAmy = casalEsperando["Sheldon"] && casalEsperando["Amy"];
-    bool casalHowardBernadette = casalEsperando["Howard"] && casalEsperando["Bernadette"];
-    bool casalLeonardPenny = casalEsperando["Leonard"] && casalEsperando["Penny"];
-    if(esperando["Sheldon"]) {
+    if(esperando[Constantes::SHELDON]) {
         if(casalLeonardPenny || casalHowardBernadette) {
             if(casalSheldonAmy) {
                 if(!casalLeonardPenny) {
-                    if(esperando["Sheldon"] < esperando["Amy"]) {
+                    if(esperando[Constantes::SHELDON] < esperando[Constantes::AMY]) {
                         return true;
                     }
                 }
             }
         } else {
             if(casalSheldonAmy) {
-                if(esperando["Sheldon"] < esperando["Amy"]) {
+                if(esperando[Constantes::SHELDON] < esperando[Constantes::AMY]) {
                     return true;
                 }
             } else {
                 //Nao tem casal
-                if(!esperando["Leonard"] && !esperando["Penny"]) {
+                if(!esperando[Constantes::LEONARD] && !esperando[Constantes::PENNY]) {
                     return true;
                 }
             }
@@ -162,26 +111,23 @@ bool Forno::sheldonPodeUsar() {
 }
 
 bool Forno::amyPodeUsar() {
-    bool casalSheldonAmy = casalEsperando["Sheldon"] && casalEsperando["Amy"];
-    bool casalHowardBernadette = casalEsperando["Howard"] && casalEsperando["Bernadette"];
-    bool casalLeonardPenny = casalEsperando["Leonard"] && casalEsperando["Penny"];
-    if(esperando["Amy"]) {
+    if(esperando[Constantes::AMY]) {
         if(casalLeonardPenny || casalHowardBernadette) {
             if(casalSheldonAmy) {
                 if(!casalLeonardPenny) {
-                    if(esperando["Amy"] < esperando["Sheldon"]) {
+                    if(esperando[Constantes::AMY] < esperando[Constantes::SHELDON]) {
                         return true;
                     }
                 }
             }
         } else {
             if(casalSheldonAmy) {
-                if(esperando["Amy"] < esperando["Sheldon"]) {
+                if(esperando[Constantes::AMY] < esperando[Constantes::SHELDON]) {
                     return true;
                 }
             } else {
                 //Nao tem casal
-                if(!esperando["Leonard"] && !esperando["Penny"]) {
+                if(!esperando[Constantes::LEONARD] && !esperando[Constantes::PENNY]) {
                     return true;
                 }
             }
@@ -191,26 +137,23 @@ bool Forno::amyPodeUsar() {
 }
 
 bool Forno::howardPodeUsar() {
-    bool casalSheldonAmy = casalEsperando["Sheldon"] && casalEsperando["Amy"];
-    bool casalHowardBernadette = casalEsperando["Howard"] && casalEsperando["Bernadette"];
-    bool casalLeonardPenny = casalEsperando["Leonard"] && casalEsperando["Penny"];
-    if(esperando["Howard"]) {
+    if(esperando[Constantes::HOWARD]) {
         if(casalLeonardPenny || casalSheldonAmy) {
             if(casalHowardBernadette) {
                 if(!casalSheldonAmy) {
-                    if(esperando["Howard"] < esperando["Bernadette"]) {
+                    if(esperando[Constantes::HOWARD] < esperando[Constantes::BERNADETTE]) {
                         return true;
                     }
                 }
             }
         } else {
             if(casalHowardBernadette) {
-                if(esperando["Howard"] < esperando["Bernadette"]) {
+                if(esperando[Constantes::HOWARD] < esperando[Constantes::BERNADETTE]) {
                     return true;
                 }
             } else {
                 //Nao tem casal
-                if(!esperando["Sheldon"] && !esperando["Amy"]) {
+                if(!esperando[Constantes::SHELDON] && !esperando[Constantes::AMY]) {
                     return true;
                 }
             }
@@ -220,26 +163,23 @@ bool Forno::howardPodeUsar() {
 }
 
 bool Forno::bernardettePodeUsar() {
-    bool casalSheldonAmy = casalEsperando["Sheldon"] && casalEsperando["Amy"];
-    bool casalHowardBernadette = casalEsperando["Howard"] && casalEsperando["Bernadette"];
-    bool casalLeonardPenny = casalEsperando["Leonard"] && casalEsperando["Penny"];
-    if(esperando["Bernadette"]) {
+    if(esperando[Constantes::BERNADETTE]) {
         if(casalLeonardPenny || casalSheldonAmy) {
             if(casalHowardBernadette) {
                 if(!casalSheldonAmy) {
-                    if(esperando["Bernadette"] < esperando["Howard"]) {
+                    if(esperando[Constantes::BERNADETTE] < esperando[Constantes::HOWARD]) {
                         return true;
                     }
                 }
             }
         } else {
             if(casalHowardBernadette) {
-                if(esperando["Bernadette"] < esperando["Howard"]) {
+                if(esperando[Constantes::BERNADETTE] < esperando[Constantes::HOWARD]) {
                     return true;
                 }
             } else {
                 //Nao tem casal
-                if(!esperando["Sheldon"] && !esperando["Amy"]) {
+                if(!esperando[Constantes::SHELDON] && !esperando[Constantes::AMY]) {
                     return true;
                 }
             }
@@ -249,26 +189,23 @@ bool Forno::bernardettePodeUsar() {
 }
 
 bool Forno::leonardPodeUsar() {
-    bool casalSheldonAmy = casalEsperando["Sheldon"] && casalEsperando["Amy"];
-    bool casalHowardBernadette = casalEsperando["Howard"] && casalEsperando["Bernadette"];
-    bool casalLeonardPenny = casalEsperando["Leonard"] && casalEsperando["Penny"];
-    if(esperando["Leonard"]) {
+    if(esperando[Constantes::LEONARD]) {
         if(casalHowardBernadette || casalSheldonAmy) {
             if(casalLeonardPenny) {
                 if(!casalHowardBernadette) {
-                    if(esperando["Leonard"] < esperando["Penny"]) {
+                    if(esperando[Constantes::LEONARD] < esperando[Constantes::PENNY]) {
                         return true;
                     }
                 }
             }
         } else {
             if(casalLeonardPenny) {
-                if(esperando["Leonard"] < esperando["Penny"]) {
+                if(esperando[Constantes::LEONARD] < esperando[Constantes::PENNY]) {
                     return true;
                 }
             } else {
                 //Nao tem casal
-                if(!esperando["Howard"] && !esperando["Bernadette"]) {
+                if(!esperando[Constantes::HOWARD] && !esperando[Constantes::BERNADETTE]) {
                     return true;
                 }
             }
@@ -278,26 +215,23 @@ bool Forno::leonardPodeUsar() {
 }
 
 bool Forno::pennyPodeUsar() {
-    bool casalSheldonAmy = casalEsperando["Sheldon"] && casalEsperando["Amy"];
-    bool casalHowardBernadette = casalEsperando["Howard"] && casalEsperando["Bernadette"];
-    bool casalLeonardPenny = casalEsperando["Leonard"] && casalEsperando["Penny"];
-    if(esperando["Penny"]) {
+    if(esperando[Constantes::PENNY]) {
         if(casalHowardBernadette || casalSheldonAmy) {
             if(casalLeonardPenny) {
                 if(!casalHowardBernadette) {
-                    if(esperando["Penny"] < esperando["Leonard"]) {
+                    if(esperando[Constantes::PENNY] < esperando[Constantes::LEONARD]) {
                         return true;
                     }
                 }
             }
         } else {
             if(casalLeonardPenny) {
-                if(esperando["Penny"] < esperando["Leonard"]) {
+                if(esperando[Constantes::PENNY] < esperando[Constantes::LEONARD]) {
                     return true;
                 }
             } else {
                 //Nao tem casal
-                if(!esperando["Howard"] && !esperando["Bernadette"]) {
+                if(!esperando[Constantes::HOWARD] && !esperando[Constantes::BERNADETTE]) {
                     return true;
                 }
             }
@@ -307,12 +241,9 @@ bool Forno::pennyPodeUsar() {
 }
 
 bool Forno::stuartPodeUsar() {
-    bool casalSheldonAmy = casalEsperando["Sheldon"] && casalEsperando["Amy"];
-    bool casalHowardBernadette = casalEsperando["Howard"] && casalEsperando["Bernadette"];
-    bool casalLeonardPenny = casalEsperando["Leonard"] && casalEsperando["Penny"];
-    if(esperando["Stuart"]) {
+    if(esperando[Constantes::STUART]) {
         if(!casalHowardBernadette && !casalLeonardPenny && !casalSheldonAmy) {
-            if(!esperando["Sheldon"] && !esperando["Amy"] && !esperando["Howard"] && !esperando["Bernadette"] && !esperando["Leonard"] && !esperando["Penny"]) {
+            if(!esperando[Constantes::SHELDON] && !esperando[Constantes::AMY] && !esperando[Constantes::HOWARD] && !esperando[Constantes::BERNADETTE] && !esperando[Constantes::LEONARD] && !esperando[Constantes::PENNY]) {
                 return true;
             }
         }
@@ -321,12 +252,9 @@ bool Forno::stuartPodeUsar() {
 }
 
 bool Forno::kripkePodeUsar() {
-    bool casalSheldonAmy = casalEsperando["Sheldon"] && casalEsperando["Amy"];
-    bool casalHowardBernadette = casalEsperando["Howard"] && casalEsperando["Bernadette"];
-    bool casalLeonardPenny = casalEsperando["Leonard"] && casalEsperando["Penny"];
-    if(esperando["Kripke"]) {
+    if(esperando[Constantes::KRIPKE]) {
         if(!casalHowardBernadette && !casalLeonardPenny && !casalSheldonAmy) {
-            if(!esperando["Stuart"] && !esperando["Sheldon"] && !esperando["Amy"] && !esperando["Howard"] && !esperando["Bernadette"] && !esperando["Leonard"] && !esperando["Penny"]) {
+            if(!esperando[Constantes::STUART] && !esperando[Constantes::SHELDON] && !esperando[Constantes::AMY] && !esperando[Constantes::HOWARD] && !esperando[Constantes::BERNADETTE] && !esperando[Constantes::LEONARD] && !esperando[Constantes::PENNY]) {
                 return true;
             }
         }
@@ -334,46 +262,68 @@ bool Forno::kripkePodeUsar() {
     return false;
 }
 
+//Considera que o privilegio de casal acaba somente quanto ambos usam o forno e saem da fila
+void Forno::atualizarCasais() {
+    if(casalSheldonAmy) {
+        casalSheldonAmy = esperando[Constantes::SHELDON] || esperando[Constantes::AMY];
+    } else {
+        casalSheldonAmy = esperando[Constantes::SHELDON] && esperando[Constantes::AMY];
+    }
+
+    if(casalHowardBernadette) {
+        casalHowardBernadette = esperando[Constantes::HOWARD] || esperando[Constantes::BERNADETTE];
+    } else {
+        casalHowardBernadette = esperando[Constantes::HOWARD] && esperando[Constantes::BERNADETTE];
+    }
+
+    if(casalLeonardPenny) {
+        casalLeonardPenny = esperando[Constantes::LEONARD] || esperando[Constantes::PENNY];
+    } else {
+        casalLeonardPenny = esperando[Constantes::LEONARD] && esperando[Constantes::PENNY];
+    }
+}
 
 void Forno::determinarBloqueios() {
 
+    atualizarCasais();
+
     //Sheldon
     if(sheldonPodeUsar()) {
-        pthread_cond_signal(&permissoes["Sheldon"]);           
+        pthread_cond_signal(&permissoes[Constantes::SHELDON]);           
     }
 
     //Amy
     if(amyPodeUsar()) {
-        pthread_cond_signal(&permissoes["Amy"]);
+        pthread_cond_signal(&permissoes[Constantes::AMY]);
     }
 
     //Howard
     if(howardPodeUsar()) {
-        pthread_cond_signal(&permissoes["Howard"]);
+        pthread_cond_signal(&permissoes[Constantes::HOWARD]);
     }
 
     //Bernardette
     if(bernardettePodeUsar()) {
-        pthread_cond_signal(&permissoes["Bernadette"]);
+        pthread_cond_signal(&permissoes[Constantes::BERNADETTE]);
     }
 
     //Leonard
     if(leonardPodeUsar()) {
-        pthread_cond_signal(&permissoes["Leonard"]);
+        pthread_cond_signal(&permissoes[Constantes::LEONARD]);
     }
 
     //Penny
     if(pennyPodeUsar()) {
-        pthread_cond_signal(&permissoes["Penny"]);
+        pthread_cond_signal(&permissoes[Constantes::PENNY]);
     }
 
     //Stuart
     if(stuartPodeUsar()) {
-        pthread_cond_signal(&permissoes["Stuart"]);
+        pthread_cond_signal(&permissoes[Constantes::STUART]);
     }
 
     //Kripke
     if(kripkePodeUsar()) {
-        pthread_cond_signal(&permissoes["Kripke"]);
+        pthread_cond_signal(&permissoes[Constantes::KRIPKE]);
     }
 }
