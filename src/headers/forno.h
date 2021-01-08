@@ -13,7 +13,7 @@ class Forno {
 
     public: 
 
-        Forno(vector<pthread_cond_t>& permissoes, pthread_mutex_t& forno);
+        Forno(vector<pthread_cond_t>& permissoes);
 
         void esperar(Personagem p);
 
@@ -36,7 +36,6 @@ class Forno {
         bool stuartPodeUsar();
         bool kripkePodeUsar();
         void atualizarCasais();
-        pthread_mutex_t forno;
         vector<pthread_cond_t>& permissoes;
         vector<int> esperando;
         bool casalSheldonAmy;

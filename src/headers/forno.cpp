@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Forno::Forno(vector<pthread_cond_t>& permissoes, pthread_mutex_t& forno) : forno(forno), permissoes(permissoes){
+Forno::Forno(vector<pthread_cond_t>& permissoes) : permissoes(permissoes){
     this->raj = new Raj(esperando, permissoes);
     this->esperando = vector<int>(Constantes::NUMERO_PERSONAGENS);
     this->casalSheldonAmy = false;
@@ -22,7 +22,6 @@ void Forno::esperar(Personagem p) {
     cout << p.getNome() << " quer usar o forno" << endl;
     this->esperando[p.getCodigo()] = this->contadorEspera++;
     determinarBloqueios();
-    pthread_mutex_unlock(&forno);
 }
 
 void Forno::liberar(Personagem p) {
@@ -30,14 +29,12 @@ void Forno::liberar(Personagem p) {
     this->esperando[p.getCodigo()] = 0;
     determinarBloqueios();
     emUso = false;
-    pthread_mutex_unlock(&forno);
 }
 
 bool Forno::pegarForno(Personagem p) {
     if(verificarPermissaoParaUsarForno(p)) {
         emUso = true;
     }
-    pthread_mutex_unlock(&forno);
     return true;
 }
 
@@ -83,7 +80,6 @@ bool Forno::verificarPermissaoParaUsarForno(Personagem p) {
 
 void Forno::verificar() {
     raj->verificar();
-    pthread_mutex_unlock(&forno);
 }
 
 bool Forno::sheldonPodeUsar() {
