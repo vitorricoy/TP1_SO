@@ -5,7 +5,6 @@
 #include <iostream>
 #include <pthread.h>
 #include "personagem.h"
-#include "raj.h"
 
 using namespace std;
 
@@ -13,35 +12,36 @@ class Forno {
 
     public: 
 
-        Forno(vector<pthread_cond_t>& permissoes);
+        Forno();
+
+        ~Forno();
 
         void esperar(Personagem p);
 
         void liberar(Personagem p);
 
         void verificar();
-
-        bool pegarForno(Personagem p);
     
     private:
         
+        // bool pegarForno(Personagem p);
         void determinarBloqueios();
-        bool verificarPermissaoParaUsarForno(Personagem p);
+        // bool verificarPermissaoParaUsarForno(Personagem p);
         bool sheldonPodeUsar();
         bool amyPodeUsar();
         bool howardPodeUsar();
-        bool bernardettePodeUsar();
+        bool bernadettePodeUsar();
         bool leonardPodeUsar();
         bool pennyPodeUsar();
         bool stuartPodeUsar();
         bool kripkePodeUsar();
         void atualizarCasais();
-        vector<pthread_cond_t>& permissoes;
+        vector<pthread_cond_t> permissoes;
+        pthread_mutex_t travaForno;
         vector<int> esperando;
         bool casalSheldonAmy;
         bool casalHowardBernadette;
         bool casalLeonardPenny;
-        Raj* raj;
         int contadorEspera;
         bool emUso;
 };

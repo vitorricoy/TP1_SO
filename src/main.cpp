@@ -2,8 +2,10 @@
 
 using namespace std;
 
+int vezes;
+
 int main(int argc, char* argv[]) {
-    int vezes = atoi(argv[1]);
+    vezes = atoi(argv[1]);
     
     return 0;
 }

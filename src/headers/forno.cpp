@@ -2,14 +2,17 @@
 #include <vector>
 #include <pthread.h>
 #include "personagem.h"
-#include "raj.h"
 #include "forno.h"
 #include "constantes.h"
 
 using namespace std;
 
-Forno::Forno(vector<pthread_cond_t>& permissoes) : permissoes(permissoes){
-    this->raj = new Raj(esperando, permissoes);
+Forno::Forno(){
+    this->permissoes = vector<pthread_cond_t>(Constantes::NUMERO_PERSONAGENS);
+    for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
+        pthread_cond_init(&this->permissoes[I], NULL);
+    }
+    pthread_mutex_init(&this->travaForno, NULL);
     this->esperando = vector<int>(Constantes::NUMERO_PERSONAGENS);
     this->casalSheldonAmy = false;
     this->casalHowardBernadette = false;
@@ -18,68 +21,95 @@ Forno::Forno(vector<pthread_cond_t>& permissoes) : permissoes(permissoes){
     this->emUso = false;
 }
 
+Forno::~Forno() {
+    for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
+        pthread_cond_destroy(&this->permissoes[I]);
+    }
+    pthread_mutex_destroy(&this->travaForno);
+}
+
 void Forno::esperar(Personagem p) {
+    pthread_mutex_lock(&this->travaForno);
     cout << p.getNome() << " quer usar o forno" << endl;
     this->esperando[p.getCodigo()] = this->contadorEspera++;
     determinarBloqueios();
+    bool jaEstaLiberado = false;
+    switch(p.getCodigo()) {
+        case Constantes::SHELDON: jaEstaLiberado = sheldonPodeUsar(); break; 
+        case Constantes::AMY: jaEstaLiberado = amyPodeUsar(); break; 
+        case Constantes::HOWARD: jaEstaLiberado = howardPodeUsar(); break; 
+        case Constantes::BERNADETTE: jaEstaLiberado = bernadettePodeUsar(); break; 
+        case Constantes::LEONARD: jaEstaLiberado = leonardPodeUsar(); break; 
+        case Constantes::PENNY: jaEstaLiberado = pennyPodeUsar(); break; 
+        case Constantes::STUART: jaEstaLiberado = stuartPodeUsar(); break; 
+        case Constantes::KRIPKE: jaEstaLiberado = kripkePodeUsar(); break;
+    }
+    if(!emUso || !jaEstaLiberado) {
+        pthread_cond_wait(&this->permissoes[p.getCodigo()], &this->travaForno);
+    }
+    emUso = true;
+    pthread_mutex_unlock(&this->travaForno);
 }
 
 void Forno::liberar(Personagem p) {
+    pthread_mutex_lock(&this->travaForno);
     cout << p.getNome() << " vai comer" << endl;
     this->esperando[p.getCodigo()] = 0;
-    determinarBloqueios();
     emUso = false;
+    determinarBloqueios();
+    pthread_mutex_unlock(&this->travaForno);
 }
 
-bool Forno::pegarForno(Personagem p) {
-    if(verificarPermissaoParaUsarForno(p)) {
-        emUso = true;
-    }
-    return true;
-}
+// bool Forno::pegarForno(Personagem p) {
+//     if(verificarPermissaoParaUsarForno(p)) {
+//         emUso = true;
+//     }
+//     return true;
+// }
 
-bool Forno::verificarPermissaoParaUsarForno(Personagem p) {
-    if(emUso) {
-        return false;
-    }
+// bool Forno::verificarPermissaoParaUsarForno(Personagem p) {
+//     if(emUso) {
+//         return false;
+//     }
 
-    if(p.getCodigo() == Constantes::SHELDON) {
-        return sheldonPodeUsar();
-    }
+//     if(p.getCodigo() == Constantes::SHELDON) {
+//         return sheldonPodeUsar();
+//     }
 
-    if(p.getCodigo() == Constantes::AMY) {
-        return amyPodeUsar();
-    }
+//     if(p.getCodigo() == Constantes::AMY) {
+//         return amyPodeUsar();
+//     }
 
-    if(p.getCodigo() == Constantes::HOWARD) {
-        return howardPodeUsar();
-    }
+//     if(p.getCodigo() == Constantes::HOWARD) {
+//         return howardPodeUsar();
+//     }
 
-    if(p.getCodigo() == Constantes::BERNADETTE) {
-        return bernardettePodeUsar();
-    } 
+//     if(p.getCodigo() == Constantes::BERNADETTE) {
+//         return bernadettePodeUsar();
+//     } 
 
-    if(p.getCodigo() == Constantes::LEONARD) {
-        return leonardPodeUsar();
-    }
+//     if(p.getCodigo() == Constantes::LEONARD) {
+//         return leonardPodeUsar();
+//     }
 
-    if(p.getCodigo() == Constantes::PENNY) {
-        return pennyPodeUsar();
-    }
+//     if(p.getCodigo() == Constantes::PENNY) {
+//         return pennyPodeUsar();
+//     }
 
-    if(p.getCodigo() == Constantes::STUART) {
-        return stuartPodeUsar();
-    }
+//     if(p.getCodigo() == Constantes::STUART) {
+//         return stuartPodeUsar();
+//     }
 
-    if(p.getCodigo() == Constantes::KRIPKE) {
-        return kripkePodeUsar();
-    }
+//     if(p.getCodigo() == Constantes::KRIPKE) {
+//         return kripkePodeUsar();
+//     }
 
-    return false;
-}
+//     return false;
+// }
 
 void Forno::verificar() {
-    raj->verificar();
+    pthread_mutex_lock(&this->travaForno);
+    pthread_mutex_unlock(&this->travaForno);
 }
 
 bool Forno::sheldonPodeUsar() {
@@ -160,7 +190,7 @@ bool Forno::howardPodeUsar() {
     return false;
 }
 
-bool Forno::bernardettePodeUsar() {
+bool Forno::bernadettePodeUsar() {
     if(esperando[Constantes::BERNADETTE]) {
         if(casalLeonardPenny || casalSheldonAmy) {
             if(casalHowardBernadette) {
@@ -283,6 +313,10 @@ void Forno::atualizarCasais() {
 
 void Forno::determinarBloqueios() {
 
+    if(emUso) {
+        return;
+    }
+
     atualizarCasais();
 
     //Sheldon
@@ -301,7 +335,7 @@ void Forno::determinarBloqueios() {
     }
 
     //Bernardette
-    if(bernardettePodeUsar()) {
+    if(bernadettePodeUsar()) {
         pthread_cond_signal(&permissoes[Constantes::BERNADETTE]);
     }
 
