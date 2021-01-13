@@ -8,17 +8,17 @@
 using namespace std;
 
 void esquentar_algo(Personagem p) {
-    cout << p.getNome() <<" começa a esquentar algo" << endl;
+    cout << p.getNome() << " começa a esquentar algo" << endl;
     sleep(1);
 }
 
 void comer(Personagem p) {
-    cout << p.getNome() <<" vai comer" << endl;
+    cout << p.getNome() << " vai comer" << endl;
     sleep(3);
 }
 
 void trabalhar(Personagem p) {
-    cout << p.getNome() <<" voltou para o trabalho" << endl;
+    cout << p.getNome() << " voltou para o trabalho" << endl;
     sleep(10);
 }
 

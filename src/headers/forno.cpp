@@ -14,6 +14,7 @@ Forno::Forno(){
     }
     pthread_mutex_init(&this->travaForno, NULL);
     this->esperando = vector<int>(Constantes::NUMERO_PERSONAGENS);
+    this->casais = vector<bool>(Constantes::NUMERO_CASAIS);
     this->casalSheldonAmy = false;
     this->casalHowardBernadette = false;
     this->casalLeonardPenny = false;
@@ -362,6 +363,15 @@ bool Forno::kripkePodeUsar() {
 
 //Considera que o privilegio de casal acaba somente quanto ambos usam o forno e saem da fila
 void Forno::atualizarCasais() {
+
+    for(int I=0; I<Constantes::NUMERO_CASAIS; I++) {
+        if(this->casais[I]) {
+            this->casais[I] = esperando[2*I] || esperando[2*I + 1];
+        } else {
+            this->casais[I] = esperando[2*I] && esperando[2*I + 1];
+        }
+    }
+
     if(casalSheldonAmy) {
         casalSheldonAmy = esperando[Constantes::SHELDON] || esperando[Constantes::AMY];
     } else {
@@ -381,6 +391,49 @@ void Forno::atualizarCasais() {
     }
 }
 
+bool Forno::podeUsar(int codigoPersonagem) {
+    if(this->esperando[codigoPersonagem]) {
+        auto modPositivo = [](int x, int mod) { return ((x%mod)+mod)%mod; };
+        if(codigoPersonagem <= 5) { // Personagem pode ser membro de casal
+            int codigoCasalMaiorPrioridade = modPositivo(codigoPersonagem/2-1, Constantes::NUMERO_CASAIS);
+            int codigoCasalAtual = codigoPersonagem/2;
+            bool existeCasal = false;
+            for(bool el : this->casais) {
+                existeCasal = existeCasal || el;
+            }
+            bool casalPresente = this->casais[codigoCasalAtual]; // Obtém se o casal do personagem está presente
+            if(existeCasal && casalPresente) {
+                if(!this->casais[codigoCasalMaiorPrioridade]) { // Verifica o casal anterior na lista de prioridades (que tem mais prioridade)
+                    if(codigoPersonagem%2 == 0) { // É o membro masculino do casal
+                        if(this->esperando[codigoPersonagem] < this->esperando[codigoPersonagem+1] || !this->esperando[codigoPersonagem+1]) {
+                            return true;
+                        }
+                    } else { // É o membro feminino
+                        if(this->esperando[codigoPersonagem] < this->esperando[codigoPersonagem-1] || !this->esperando[codigoPersonagem-1]) {
+                            return true;
+                        }
+                    }
+                }
+            } else {
+                if(!existeCasal) { // Não tem casal
+                    if(!this->esperando[codigoCasalMaiorPrioridade*2] && !this->esperando[codigoCasalMaiorPrioridade*2 + 1]) { // Verifica se nenhum personagem com mais prioridade está esperando na fila
+                        return true;
+                    }
+                }
+            }
+        } else { // Stuart e Kripke
+            bool algumPrioritarioEsperando = false;
+            for(int I=0; I<codigoPersonagem; I++) {
+                algumPrioritarioEsperando = algumPrioritarioEsperando || this->esperando[I];
+            }
+            if(!algumPrioritarioEsperando) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void Forno::determinarBloqueios() {
 
     if(emUso) {
@@ -388,6 +441,23 @@ void Forno::determinarBloqueios() {
     }
 
     atualizarCasais();
+
+    if(sheldonPodeUsar() != podeUsar(0) || amyPodeUsar() != podeUsar(1) || howardPodeUsar() != podeUsar(2) || bernadettePodeUsar() != podeUsar(3) || leonardPodeUsar() != podeUsar(4) ||
+       pennyPodeUsar() != podeUsar(5) || stuartPodeUsar() != podeUsar(6) || kripkePodeUsar() != podeUsar(7)) {
+           cout << "Erro!!" << endl << "Esperando: ";
+           for(int el : this->esperando) {
+               cout << el << " ";
+           }
+           cout << endl << " " << "Podem usar: " << endl;
+           cout << sheldonPodeUsar() << " " << podeUsar(0) << endl;
+           cout << amyPodeUsar() << " " << podeUsar(1) << endl;
+           cout << howardPodeUsar() << " " << podeUsar(2) << endl;
+           cout << bernadettePodeUsar() << " " << podeUsar(3) << endl;
+           cout << leonardPodeUsar() << " " << podeUsar(4) << endl;
+           cout << pennyPodeUsar() << " " << podeUsar(5) << endl;
+           cout << stuartPodeUsar() << " " << podeUsar(6) << endl;
+           cout << kripkePodeUsar() << " " << podeUsar(7) << endl << endl;
+       }
 
     //Sheldon
     if(sheldonPodeUsar()) {

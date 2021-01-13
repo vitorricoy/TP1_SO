@@ -28,6 +28,7 @@ class Forno {
         void determinarBloqueios();
         // bool verificarPermissaoParaUsarForno(Personagem p);
         bool filaVazia();
+        bool podeUsar(int codigoPersonagem);
         bool sheldonPodeUsar();
         bool amyPodeUsar();
         bool howardPodeUsar();
@@ -40,6 +41,7 @@ class Forno {
         vector<pthread_cond_t> permissoes;
         pthread_mutex_t travaForno;
         vector<int> esperando;
+        vector<bool> casais;
         bool casalSheldonAmy;
         bool casalHowardBernadette;
         bool casalLeonardPenny;
