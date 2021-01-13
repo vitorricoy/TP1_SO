@@ -3,10 +3,17 @@
 
 using namespace std;
 
+Personagem::Personagem(string name, int code) {
+    nome = name;
+    codigo = code;
+}
+
+Personagem::Personagem() : Personagem("", -1) {}
+
 string Personagem::getNome() {
-    return "";
+    return nome;
 }
 
 int Personagem::getCodigo() {
-    return 0;
+    return codigo;
 }

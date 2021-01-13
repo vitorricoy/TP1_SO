@@ -20,13 +20,14 @@ class Forno {
 
         void liberar(Personagem p);
 
-        void verificar();
+        string verificar();
     
     private:
         
         // bool pegarForno(Personagem p);
         void determinarBloqueios();
         // bool verificarPermissaoParaUsarForno(Personagem p);
+        bool filaVazia();
         bool sheldonPodeUsar();
         bool amyPodeUsar();
         bool howardPodeUsar();
