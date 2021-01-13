@@ -8,8 +8,8 @@
 using namespace std;
 
 void esquentar_algo(Personagem p) {
-    sleep(1);
     cout << p.getNome() <<" começa a esquentar algo" << endl;
+    sleep(1);
 }
 
 void comer(Personagem p) {
