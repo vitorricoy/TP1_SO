@@ -27,6 +27,11 @@ namespace Constantes {
     const string NOME_PENNY = "Penny";
     const string NOME_STUART = "Stuart";
     const string NOME_KRIPKE = "Kripke";
+
+    const int FORA_FILA = 0;
+    const int SOZINHO_FILA = 1;
+    const int CASAL_DESFEITO_FILA = 2;
+    const int CASAL_FILA = 3;
 }
 
 

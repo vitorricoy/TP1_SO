@@ -135,86 +135,35 @@ string Forno::verificar() {
 
 //Considera que o privilegio de casal acaba somente quanto ambos usam o forno e saem da fila
 void Forno::atualizarCasais() {
-
-    for(int I=0; I<Constantes::NUMERO_CASAIS; I++) {
-        if(this->casais[I]) {
-            this->casais[I] = esperando[2*I] || esperando[2*I + 1];
-        } else {
-            this->casais[I] = esperando[2*I] && esperando[2*I + 1];
-        }
-    }
-
-    if(casalSheldonAmy) {
-        casalSheldonAmy = esperando[Constantes::SHELDON] || esperando[Constantes::AMY];
-    } else {
-        casalSheldonAmy = esperando[Constantes::SHELDON] && esperando[Constantes::AMY];
-    }
-
-    if(casalHowardBernadette) {
-        casalHowardBernadette = esperando[Constantes::HOWARD] || esperando[Constantes::BERNADETTE];
-    } else {
-        casalHowardBernadette = esperando[Constantes::HOWARD] && esperando[Constantes::BERNADETTE];
-    }
-
-    if(casalLeonardPenny) {
-        casalLeonardPenny = esperando[Constantes::LEONARD] || esperando[Constantes::PENNY];
-    } else {
-        casalLeonardPenny = esperando[Constantes::LEONARD] && esperando[Constantes::PENNY];
-    }
+    
 }
 
 bool Forno::podeUsar(int codigoPersonagem) {
-    if(this->personagemFila[codigoPersonagem].estaNaFila()) {
-        auto modPositivo = [](int x, int mod) { return ((x%mod)+mod)%mod; };
-        // Obtém a prioridade do personagem de maior prioridade na fila
-        int maiorPrioridade = 0;
-        for(InfoPersonagemFila info : this->personagemFila) {
-            if(info.getPrioridade() > maiorPrioridade) {
-                maiorPrioridade = info.getPrioridade();
-            }
-        }
-        // Se o personagem atual tiver uma prioridade menor que alguém da fila, ele não pode usar o forno
-        if(this->personagemFila[codigoPersonagem].getPrioridade() < maiorPrioridade) {
-            return false;
-        }
-        if(codigoPersonagem <= 5) { // Personagem pode ser membro de casal
-            int codigoCasalMaiorPrioridade = modPositivo(codigoPersonagem/2-1, Constantes::NUMERO_CASAIS);
-            int codigoCasalAtual = codigoPersonagem/2;
-            bool existeCasal = false;
-            for(bool el : this->casais) {
-                existeCasal = existeCasal || el;
-            }
-            bool casalPresente = this->casais[codigoCasalAtual]; // Obtém se o casal do personagem está presente
-            if(existeCasal && casalPresente) {
-                if(!this->casais[codigoCasalMaiorPrioridade]) { // Verifica o casal anterior na lista de prioridades (que tem mais prioridade)
-                    if(codigoPersonagem%2 == 0) { // É o membro masculino do casal
-                        if(this->esperando[codigoPersonagem] < this->esperando[codigoPersonagem+1] || !this->esperando[codigoPersonagem+1]) {
-                            return true;
-                        }
-                    } else { // É o membro feminino
-                        if(this->esperando[codigoPersonagem] < this->esperando[codigoPersonagem-1] || !this->esperando[codigoPersonagem-1]) {
-                            return true;
-                        }
-                    }
-                }
-            } else {
-                if(!existeCasal) { // Não tem casal
-                    if(!this->esperando[codigoCasalMaiorPrioridade*2] && !this->esperando[codigoCasalMaiorPrioridade*2 + 1]) { // Verifica se nenhum personagem com mais prioridade está esperando na fila
-                        return true;
-                    }
-                }
-            }
-        } else { // Stuart e Kripke
-            bool algumPrioritarioEsperando = false;
-            for(int I=0; I<codigoPersonagem; I++) {
-                algumPrioritarioEsperando = algumPrioritarioEsperando || this->esperando[I];
-            }
-            if(!algumPrioritarioEsperando) {
-                return true;
+    // Verifica se o personagem tem mais prioridade que todos
+    for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
+        if(I != codigoPersonagem) {
+            if(!this->personagemFila[codigoPersonagem].temMaisPrioridade(this->personagemFila[I])) {
+                return false;
             }
         }
     }
-    return false;
+    return true;
+}
+
+void Forno::atualizarPrioridades() {
+    for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
+        if(!this->personagemFila[I].estaNaFila()) {
+            this->personagemFila[I].setPrioridade(Constantes::FORA_FILA);
+        } else {
+            if(I >= 5) {
+                int idtCasal = I/2;
+                
+
+            } else {
+                this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);
+            }
+        }
+    }
 }
 
 void Forno::determinarBloqueios() {
