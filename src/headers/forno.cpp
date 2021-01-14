@@ -4,8 +4,13 @@
 #include "personagem.h"
 #include "forno.h"
 #include "constantes.h"
+#include "info_personagem_fila.h"
 
 using namespace std;
+
+struct InformacoesFila {
+    
+};
 
 Forno::Forno(){
     this->permissoes = vector<pthread_cond_t>(Constantes::NUMERO_PERSONAGENS);
@@ -13,7 +18,7 @@ Forno::Forno(){
         pthread_cond_init(&this->permissoes[I], NULL);
     }
     pthread_mutex_init(&this->travaForno, NULL);
-    this->esperando = vector<int>(Constantes::NUMERO_PERSONAGENS);
+    this->personagemFila = vector<InfoPersonagemFila>(Constantes::NUMERO_PERSONAGENS);
     this->casais = vector<bool>(Constantes::NUMERO_CASAIS);
     this->casalSheldonAmy = false;
     this->casalHowardBernadette = false;
@@ -32,19 +37,10 @@ Forno::~Forno() {
 void Forno::esperar(Personagem p) {
     pthread_mutex_lock(&this->travaForno);
     cout << p.getNome() << " quer usar o forno" << endl;
-    this->esperando[p.getCodigo()] = this->contadorEspera++;
+    this->personagemFila[p.getCodigo()].entrarNaFila(this->contadorEspera++);
+    this->atualizarPrioridades();
     this->determinarBloqueios();
-    bool jaEstaLiberado = false;
-    switch(p.getCodigo()) {
-        case Constantes::SHELDON: jaEstaLiberado = sheldonPodeUsar(); break; 
-        case Constantes::AMY: jaEstaLiberado = amyPodeUsar(); break; 
-        case Constantes::HOWARD: jaEstaLiberado = howardPodeUsar(); break; 
-        case Constantes::BERNADETTE: jaEstaLiberado = bernadettePodeUsar(); break; 
-        case Constantes::LEONARD: jaEstaLiberado = leonardPodeUsar(); break; 
-        case Constantes::PENNY: jaEstaLiberado = pennyPodeUsar(); break; 
-        case Constantes::STUART: jaEstaLiberado = stuartPodeUsar(); break; 
-        case Constantes::KRIPKE: jaEstaLiberado = kripkePodeUsar(); break;
-    }
+    bool jaEstaLiberado = podeUsar(p.getCodigo());
     if(!emUso || !jaEstaLiberado) {
         pthread_cond_wait(&this->permissoes[p.getCodigo()], &this->travaForno);
     }
@@ -54,62 +50,16 @@ void Forno::esperar(Personagem p) {
 
 void Forno::liberar(Personagem p) {
     pthread_mutex_lock(&this->travaForno);
-    this->esperando[p.getCodigo()] = 0;
+    this->personagemFila[p.getCodigo()].sairDaFila();
     emUso = false;
+    this->atualizarPrioridades();
     this->determinarBloqueios();
     pthread_mutex_unlock(&this->travaForno);
 }
 
-// bool Forno::pegarForno(Personagem p) {
-//     if(verificarPermissaoParaUsarForno(p)) {
-//         emUso = true;
-//     }
-//     return true;
-// }
-
-// bool Forno::verificarPermissaoParaUsarForno(Personagem p) {
-//     if(emUso) {
-//         return false;
-//     }
-
-//     if(p.getCodigo() == Constantes::SHELDON) {
-//         return sheldonPodeUsar();
-//     }
-
-//     if(p.getCodigo() == Constantes::AMY) {
-//         return amyPodeUsar();
-//     }
-
-//     if(p.getCodigo() == Constantes::HOWARD) {
-//         return howardPodeUsar();
-//     }
-
-//     if(p.getCodigo() == Constantes::BERNADETTE) {
-//         return bernadettePodeUsar();
-//     } 
-
-//     if(p.getCodigo() == Constantes::LEONARD) {
-//         return leonardPodeUsar();
-//     }
-
-//     if(p.getCodigo() == Constantes::PENNY) {
-//         return pennyPodeUsar();
-//     }
-
-//     if(p.getCodigo() == Constantes::STUART) {
-//         return stuartPodeUsar();
-//     }
-
-//     if(p.getCodigo() == Constantes::KRIPKE) {
-//         return kripkePodeUsar();
-//     }
-
-//     return false;
-// }
-
 bool Forno::filaVazia() {
-    for(int elemento: this->esperando) {
-        if(elemento) {
+    for(InfoPersonagemFila elemento: this->personagemFila) {
+        if(elemento.estaNaFila()) {
             return false;
         }
     }
@@ -183,184 +133,6 @@ string Forno::verificar() {
     return retorno;
 }
 
-bool Forno::sheldonPodeUsar() {
-    if(esperando[Constantes::SHELDON]) {
-        if(casalLeonardPenny || casalHowardBernadette) {
-            if(casalSheldonAmy) {
-                if(!casalLeonardPenny) {
-                    if(esperando[Constantes::SHELDON] < esperando[Constantes::AMY] || !esperando[Constantes::AMY]) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if(casalSheldonAmy) {
-                if(esperando[Constantes::SHELDON] < esperando[Constantes::AMY] || !esperando[Constantes::AMY]) {
-                    return true;
-                }
-            } else {
-                //Nao tem casal
-                if(!esperando[Constantes::LEONARD] && !esperando[Constantes::PENNY]) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-bool Forno::amyPodeUsar() {
-    if(esperando[Constantes::AMY]) {
-        if(casalLeonardPenny || casalHowardBernadette) {
-            if(casalSheldonAmy) {
-                if(!casalLeonardPenny) {
-                    if(esperando[Constantes::AMY] < esperando[Constantes::SHELDON] || !esperando[Constantes::SHELDON]) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if(casalSheldonAmy) {
-                if(esperando[Constantes::AMY] < esperando[Constantes::SHELDON] || !esperando[Constantes::SHELDON]) {
-                    return true;
-                }
-            } else {
-                //Nao tem casal
-                if(!esperando[Constantes::LEONARD] && !esperando[Constantes::PENNY]) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-bool Forno::howardPodeUsar() {
-    if(esperando[Constantes::HOWARD]) {
-        if(casalLeonardPenny || casalSheldonAmy) {
-            if(casalHowardBernadette) {
-                if(!casalSheldonAmy) {
-                    if(esperando[Constantes::HOWARD] < esperando[Constantes::BERNADETTE] || !esperando[Constantes::BERNADETTE]) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if(casalHowardBernadette) {
-                if(esperando[Constantes::HOWARD] < esperando[Constantes::BERNADETTE] || !esperando[Constantes::BERNADETTE]) {
-                    return true;
-                }
-            } else {
-                //Nao tem casal
-                if(!esperando[Constantes::SHELDON] && !esperando[Constantes::AMY]) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-bool Forno::bernadettePodeUsar() {
-    if(esperando[Constantes::BERNADETTE]) {
-        if(casalLeonardPenny || casalSheldonAmy) {
-            if(casalHowardBernadette) {
-                if(!casalSheldonAmy) {
-                    if(esperando[Constantes::BERNADETTE] < esperando[Constantes::HOWARD] || !esperando[Constantes::HOWARD]) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if(casalHowardBernadette) {
-                if(esperando[Constantes::BERNADETTE] < esperando[Constantes::HOWARD] || !esperando[Constantes::HOWARD]) {
-                    return true;
-                }
-            } else {
-                //Nao tem casal
-                if(!esperando[Constantes::SHELDON] && !esperando[Constantes::AMY]) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-bool Forno::leonardPodeUsar() {
-    if(esperando[Constantes::LEONARD]) {
-        if(casalHowardBernadette || casalSheldonAmy) {
-            if(casalLeonardPenny) {
-                if(!casalHowardBernadette) {
-                    if(esperando[Constantes::LEONARD] < esperando[Constantes::PENNY] || !esperando[Constantes::PENNY]) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if(casalLeonardPenny) {
-                if(esperando[Constantes::LEONARD] < esperando[Constantes::PENNY] || !esperando[Constantes::PENNY]) {
-                    return true;
-                }
-            } else {
-                //Nao tem casal
-                if(!esperando[Constantes::HOWARD] && !esperando[Constantes::BERNADETTE]) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-bool Forno::pennyPodeUsar() {
-    if(esperando[Constantes::PENNY]) {
-        if(casalHowardBernadette || casalSheldonAmy) {
-            if(casalLeonardPenny) {
-                if(!casalHowardBernadette) {
-                    if(esperando[Constantes::PENNY] < esperando[Constantes::LEONARD] || !esperando[Constantes::LEONARD]) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if(casalLeonardPenny) {
-                if(esperando[Constantes::PENNY] < esperando[Constantes::LEONARD] || !esperando[Constantes::LEONARD]) {
-                    return true;
-                }
-            } else {
-                //Nao tem casal
-                if(!esperando[Constantes::HOWARD] && !esperando[Constantes::BERNADETTE]) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-bool Forno::stuartPodeUsar() {
-    if(esperando[Constantes::STUART]) {
-        if(!casalHowardBernadette && !casalLeonardPenny && !casalSheldonAmy) {
-            if(!esperando[Constantes::SHELDON] && !esperando[Constantes::AMY] && !esperando[Constantes::HOWARD] && !esperando[Constantes::BERNADETTE] && !esperando[Constantes::LEONARD] && !esperando[Constantes::PENNY]) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-bool Forno::kripkePodeUsar() {
-    if(esperando[Constantes::KRIPKE]) {
-        if(!casalHowardBernadette && !casalLeonardPenny && !casalSheldonAmy) {
-            if(!esperando[Constantes::STUART] && !esperando[Constantes::SHELDON] && !esperando[Constantes::AMY] && !esperando[Constantes::HOWARD] && !esperando[Constantes::BERNADETTE] && !esperando[Constantes::LEONARD] && !esperando[Constantes::PENNY]) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
 //Considera que o privilegio de casal acaba somente quanto ambos usam o forno e saem da fila
 void Forno::atualizarCasais() {
 
@@ -392,8 +164,19 @@ void Forno::atualizarCasais() {
 }
 
 bool Forno::podeUsar(int codigoPersonagem) {
-    if(this->esperando[codigoPersonagem]) {
+    if(this->personagemFila[codigoPersonagem].estaNaFila()) {
         auto modPositivo = [](int x, int mod) { return ((x%mod)+mod)%mod; };
+        // Obtém a prioridade do personagem de maior prioridade na fila
+        int maiorPrioridade = 0;
+        for(InfoPersonagemFila info : this->personagemFila) {
+            if(info.getPrioridade() > maiorPrioridade) {
+                maiorPrioridade = info.getPrioridade();
+            }
+        }
+        // Se o personagem atual tiver uma prioridade menor que alguém da fila, ele não pode usar o forno
+        if(this->personagemFila[codigoPersonagem].getPrioridade() < maiorPrioridade) {
+            return false;
+        }
         if(codigoPersonagem <= 5) { // Personagem pode ser membro de casal
             int codigoCasalMaiorPrioridade = modPositivo(codigoPersonagem/2-1, Constantes::NUMERO_CASAIS);
             int codigoCasalAtual = codigoPersonagem/2;
@@ -442,60 +225,9 @@ void Forno::determinarBloqueios() {
 
     atualizarCasais();
 
-    if(sheldonPodeUsar() != podeUsar(0) || amyPodeUsar() != podeUsar(1) || howardPodeUsar() != podeUsar(2) || bernadettePodeUsar() != podeUsar(3) || leonardPodeUsar() != podeUsar(4) ||
-       pennyPodeUsar() != podeUsar(5) || stuartPodeUsar() != podeUsar(6) || kripkePodeUsar() != podeUsar(7)) {
-           cout << "Erro!!" << endl << "Esperando: ";
-           for(int el : this->esperando) {
-               cout << el << " ";
-           }
-           cout << endl << " " << "Podem usar: " << endl;
-           cout << sheldonPodeUsar() << " " << podeUsar(0) << endl;
-           cout << amyPodeUsar() << " " << podeUsar(1) << endl;
-           cout << howardPodeUsar() << " " << podeUsar(2) << endl;
-           cout << bernadettePodeUsar() << " " << podeUsar(3) << endl;
-           cout << leonardPodeUsar() << " " << podeUsar(4) << endl;
-           cout << pennyPodeUsar() << " " << podeUsar(5) << endl;
-           cout << stuartPodeUsar() << " " << podeUsar(6) << endl;
-           cout << kripkePodeUsar() << " " << podeUsar(7) << endl << endl;
-       }
-
-    //Sheldon
-    if(sheldonPodeUsar()) {
-        pthread_cond_signal(&permissoes[Constantes::SHELDON]);           
-    }
-
-    //Amy
-    if(amyPodeUsar()) {
-        pthread_cond_signal(&permissoes[Constantes::AMY]);
-    }
-
-    //Howard
-    if(howardPodeUsar()) {
-        pthread_cond_signal(&permissoes[Constantes::HOWARD]);
-    }
-
-    //Bernardette
-    if(bernadettePodeUsar()) {
-        pthread_cond_signal(&permissoes[Constantes::BERNADETTE]);
-    }
-
-    //Leonard
-    if(leonardPodeUsar()) {
-        pthread_cond_signal(&permissoes[Constantes::LEONARD]);
-    }
-
-    //Penny
-    if(pennyPodeUsar()) {
-        pthread_cond_signal(&permissoes[Constantes::PENNY]);
-    }
-
-    //Stuart
-    if(stuartPodeUsar()) {
-        pthread_cond_signal(&permissoes[Constantes::STUART]);
-    }
-
-    //Kripke
-    if(kripkePodeUsar()) {
-        pthread_cond_signal(&permissoes[Constantes::KRIPKE]);
+    for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
+        if(podeUsar(I)) {
+            pthread_cond_signal(&permissoes[I]);
+        }
     }
 }

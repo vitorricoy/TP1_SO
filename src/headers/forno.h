@@ -5,6 +5,7 @@
 #include <iostream>
 #include <pthread.h>
 #include "personagem.h"
+#include "info_personagem_fila.h"
 
 using namespace std;
 
@@ -29,18 +30,11 @@ class Forno {
         // bool verificarPermissaoParaUsarForno(Personagem p);
         bool filaVazia();
         bool podeUsar(int codigoPersonagem);
-        bool sheldonPodeUsar();
-        bool amyPodeUsar();
-        bool howardPodeUsar();
-        bool bernadettePodeUsar();
-        bool leonardPodeUsar();
-        bool pennyPodeUsar();
-        bool stuartPodeUsar();
-        bool kripkePodeUsar();
         void atualizarCasais();
+        void atualizarPrioridades();
         vector<pthread_cond_t> permissoes;
         pthread_mutex_t travaForno;
-        vector<int> esperando;
+        vector<InfoPersonagemFila> personagemFila;
         vector<bool> casais;
         bool casalSheldonAmy;
         bool casalHowardBernadette;
