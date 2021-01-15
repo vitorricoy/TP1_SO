@@ -30,15 +30,11 @@ class Forno {
         // bool verificarPermissaoParaUsarForno(Personagem p);
         bool filaVazia();
         bool podeUsar(int codigoPersonagem);
-        void atualizarCasais();
         void atualizarPrioridades();
         vector<pthread_cond_t> permissoes;
         pthread_mutex_t travaForno;
         vector<InfoPersonagemFila> personagemFila;
-        vector<bool> casais;
-        bool casalSheldonAmy;
-        bool casalHowardBernadette;
-        bool casalLeonardPenny;
+        bool novoCasalFormado;
         int contadorEspera;
         bool emUso;
 };

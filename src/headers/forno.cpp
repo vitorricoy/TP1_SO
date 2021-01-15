@@ -19,10 +19,10 @@ Forno::Forno(){
     }
     pthread_mutex_init(&this->travaForno, NULL);
     this->personagemFila = vector<InfoPersonagemFila>(Constantes::NUMERO_PERSONAGENS);
-    this->casais = vector<bool>(Constantes::NUMERO_CASAIS);
-    this->casalSheldonAmy = false;
-    this->casalHowardBernadette = false;
-    this->casalLeonardPenny = false;
+    for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
+        this->personagemFila[I].setCodigo(I);
+    }
+    this->novoCasalFormado = false;
     this->contadorEspera = 1;
     this->emUso = false;
 }
@@ -41,16 +41,17 @@ void Forno::esperar(Personagem p) {
     this->atualizarPrioridades();
     this->determinarBloqueios();
     bool jaEstaLiberado = podeUsar(p.getCodigo());
-    if(!emUso || !jaEstaLiberado) {
+    if(emUso || !jaEstaLiberado) {
         pthread_cond_wait(&this->permissoes[p.getCodigo()], &this->travaForno);
     }
     emUso = true;
+    this->personagemFila[p.getCodigo()].sairDaFila();
+    this->atualizarPrioridades();
     pthread_mutex_unlock(&this->travaForno);
 }
 
 void Forno::liberar(Personagem p) {
     pthread_mutex_lock(&this->travaForno);
-    this->personagemFila[p.getCodigo()].sairDaFila();
     emUso = false;
     this->atualizarPrioridades();
     this->determinarBloqueios();
@@ -71,71 +72,55 @@ string Forno::verificar() {
     string retorno = "";
 
     if(!this->filaVazia() && !this->emUso) {
-        if(!this->sheldonPodeUsar() && !this->amyPodeUsar() && !this->howardPodeUsar() && !this->bernadettePodeUsar() 
-           && !this->leonardPodeUsar() && !this->pennyPodeUsar() && !this->stuartPodeUsar() && !this->kripkePodeUsar()) {
+        bool alguemPodeUsar = false;
+        for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
+            alguemPodeUsar = alguemPodeUsar || podeUsar(I);
+        }
+        if(!alguemPodeUsar) {
             int escolhido = drand48()*3;
             switch(escolhido) {
-                case 0: 
-                    if(casalSheldonAmy && esperando[Constantes::SHELDON] && esperando[Constantes::AMY]) { // Tratando o caso de apenas um dos membros do casal estar na fila com prioridade de casal
-                        if(esperando[Constantes::SHELDON] < esperando[Constantes::AMY]) {
-                            pthread_cond_signal(&permissoes[Constantes::SHELDON]);
-                            retorno = Constantes::NOME_SHELDON;
+                case 0:
+                    if(this->personagemFila[Constantes::SHELDON].estaNaFila() && this->personagemFila[Constantes::AMY].estaNaFila()) {
+                        this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                        this->personagemFila[Constantes::AMY].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                    } else {
+                        if(this->personagemFila[Constantes::SHELDON].estaNaFila()) {
+                            this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
                         } else {
-                            pthread_cond_signal(&permissoes[Constantes::AMY]);
-                            retorno = Constantes::NOME_AMY;
+                            this->personagemFila[Constantes::AMY].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
                         }
-                    } else if(esperando[Constantes::SHELDON]) {
-                            pthread_cond_signal(&permissoes[Constantes::SHELDON]);
-                            retorno = Constantes::NOME_SHELDON;
-                    } else { // AMY esperando
-                            pthread_cond_signal(&permissoes[Constantes::AMY]);
-                            retorno = Constantes::NOME_AMY;
                     }
                     break;
                 case 1:
-                    if(casalHowardBernadette && esperando[Constantes::HOWARD] && esperando[Constantes::BERNADETTE]) { // Tratando o caso de apenas um dos membros do casal estar na fila com prioridade de casal
-                        if(esperando[Constantes::HOWARD] < esperando[Constantes::BERNADETTE]) {
-                            pthread_cond_signal(&permissoes[Constantes::HOWARD]);
-                            retorno = Constantes::NOME_HOWARD;
+                    if(this->personagemFila[Constantes::HOWARD].estaNaFila() && this->personagemFila[Constantes::BERNADETTE].estaNaFila()) {
+                        this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                        this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                    } else {
+                        if(this->personagemFila[Constantes::HOWARD].estaNaFila()) {
+                            this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
                         } else {
-                            pthread_cond_signal(&permissoes[Constantes::BERNADETTE]);
-                            retorno = Constantes::NOME_BERNADETTE;
+                            this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
                         }
-                    } else if(esperando[Constantes::HOWARD]) {
-                            pthread_cond_signal(&permissoes[Constantes::HOWARD]);
-                            retorno = Constantes::NOME_HOWARD;
-                    } else { // BERNADETTE esperando
-                            pthread_cond_signal(&permissoes[Constantes::BERNADETTE]);
-                            retorno = Constantes::NOME_BERNADETTE;
                     }
                     break;
                 case 2:
-                    if(casalLeonardPenny && esperando[Constantes::LEONARD] && esperando[Constantes::PENNY]) { // Tratando o caso de apenas um dos membros do casal estar na fila com prioridade de casal
-                        if(esperando[Constantes::LEONARD] < esperando[Constantes::PENNY]) {
-                            pthread_cond_signal(&permissoes[Constantes::LEONARD]);
-                            retorno = Constantes::NOME_LEONARD;
+                    if(this->personagemFila[Constantes::LEONARD].estaNaFila() && this->personagemFila[Constantes::PENNY].estaNaFila()) {
+                        this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                        this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                    } else {
+                        if(this->personagemFila[Constantes::LEONARD].estaNaFila()) {
+                            this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
                         } else {
-                            pthread_cond_signal(&permissoes[Constantes::PENNY]);
-                            retorno = Constantes::NOME_PENNY;
+                            this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
                         }
-                    } else if(esperando[Constantes::LEONARD]) {
-                            pthread_cond_signal(&permissoes[Constantes::LEONARD]);
-                            retorno = Constantes::NOME_LEONARD;
-                    } else { // PENNY esperando
-                            pthread_cond_signal(&permissoes[Constantes::PENNY]);
-                            retorno = Constantes::NOME_PENNY;
                     }
                     break;
             }
+            this->determinarBloqueios();
         }
     }
     pthread_mutex_unlock(&this->travaForno);
     return retorno;
-}
-
-//Considera que o privilegio de casal acaba somente quanto ambos usam o forno e saem da fila
-void Forno::atualizarCasais() {
-    
 }
 
 bool Forno::podeUsar(int codigoPersonagem) {
@@ -151,19 +136,37 @@ bool Forno::podeUsar(int codigoPersonagem) {
 }
 
 void Forno::atualizarPrioridades() {
+    for(int I=0; I<Constantes::NUMERO_CASAIS; I++) {
+        if(this->personagemFila[2*I].estaNaFila() && this->personagemFila[2*I+1].estaNaFila()) {
+            if(this->personagemFila[2*I].getPrioridade() < Constantes::CASAL_FILA && this->personagemFila[2*I].getPrioridade() < Constantes::CASAL_FILA) {
+                this->novoCasalFormado = true;
+            }
+        }
+    }
     for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
         if(!this->personagemFila[I].estaNaFila()) {
             this->personagemFila[I].setPrioridade(Constantes::FORA_FILA);
         } else {
-            if(I >= 5) {
+            if(I <= 5) {
                 int idtCasal = I/2;
-                
-
+                if(this->personagemFila[2*idtCasal].estaNaFila() && this->personagemFila[2*idtCasal+1].estaNaFila()) {
+                    this->personagemFila[2*idtCasal].setPrioridade(Constantes::CASAL_FILA);
+                    this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::CASAL_FILA);
+                } else {
+                    if(this->personagemFila[I].getPrioridade() == Constantes::CASAL_FILA) { // Namorado(a) usando forno
+                        if(this->novoCasalFormado) {
+                            this->personagemFila[I].setPrioridade(Constantes::CASAL_DESFEITO_FILA);
+                        }
+                    } else {
+                        this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);
+                    }
+                }
             } else {
                 this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);
             }
         }
     }
+    this->novoCasalFormado = false;
 }
 
 void Forno::determinarBloqueios() {
@@ -171,8 +174,6 @@ void Forno::determinarBloqueios() {
     if(emUso) {
         return;
     }
-
-    atualizarCasais();
 
     for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
         if(podeUsar(I)) {

@@ -14,12 +14,12 @@ void esquentar_algo(Personagem p) {
 
 void comer(Personagem p) {
     cout << p.getNome() << " vai comer" << endl;
-    sleep(3);
+    sleep(2);
 }
 
 void trabalhar(Personagem p) {
     cout << p.getNome() << " voltou para o trabalho" << endl;
-    sleep(10);
+    sleep(3);
 }
 
 int vezes;

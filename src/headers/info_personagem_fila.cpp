@@ -8,15 +8,16 @@ InfoPersonagemFila::InfoPersonagemFila() {
     this->nivelPrioridade = 0;
     this->tempoChegada = 0;
     this->presenteNaFila = false;
-    this->posicaoFila = -1;
+    this->codigoPersonagem = -1;
 }
 
 void InfoPersonagemFila::setPrioridade(int prioridade) {
+    //cout << this->getCodigo() << " mudou para prioridade " << prioridade << endl;
     this->nivelPrioridade = prioridade;
 }
 
-void InfoPersonagemFila::setPosicao(int posicao) {
-    this->posicaoFila = posicao;
+void InfoPersonagemFila::setCodigo(int codigo) {
+    this->codigoPersonagem = codigo;
 }
 
 void InfoPersonagemFila::entrarNaFila(int tempoChegada) {
@@ -26,6 +27,7 @@ void InfoPersonagemFila::entrarNaFila(int tempoChegada) {
 
 void InfoPersonagemFila::sairDaFila() {
     this->presenteNaFila = false;
+    this->nivelPrioridade = Constantes::FORA_FILA;
 }
 
 bool InfoPersonagemFila::estaNaFila() {
@@ -40,34 +42,34 @@ int InfoPersonagemFila::getPrioridade() {
     return this->nivelPrioridade;
 }
 
-int InfoPersonagemFila::getPosicao() {
-    return this->posicaoFila;
+int InfoPersonagemFila::getCodigo() {
+    return this->codigoPersonagem;
 }
 
 bool InfoPersonagemFila::temMaisPrioridade(InfoPersonagemFila comparacao) {
-    if(!this->presenteNaFila || comparacao.getPrioridade() > this->getPrioridade()) {
+    if(comparacao.getPrioridade() > this->getPrioridade()) {
         return false;
     }
     
-    if(!comparacao.estaNaFila() || this->getPrioridade() > comparacao.getPrioridade()) {
+    if(this->getPrioridade() > comparacao.getPrioridade()) {
         return true;
     }
 
-    if(this->getPosicao() >= 6 && comparacao.getPosicao() <= 5) {
+    if(this->getCodigo() >= 6 && comparacao.getCodigo() <= 5) {
         return false;
     }
 
-    if(this->getPosicao() <= 5 && comparacao.getPosicao() >= 6) {
+    if(this->getCodigo() <= 5 && comparacao.getCodigo() >= 6) {
         return true;
     }
 
-    if(this->getPosicao() >= 6 && comparacao.getPosicao() >= 6) {
-        return this->getPosicao() < comparacao.getPosicao();
+    if(this->getCodigo() >= 6 && comparacao.getCodigo() >= 6) {
+        return this->getCodigo() < comparacao.getCodigo();
     }
 
-    if(this->getPosicao() <= 5) {
-        int idtCasal = this->getPosicao()/2;
-        int idtCasalComparacao = comparacao.getPosicao()/2;
+    if(this->getCodigo() <= 5 && comparacao.getCodigo() <= 5) {
+        int idtCasal = this->getCodigo()/2;
+        int idtCasalComparacao = comparacao.getCodigo()/2;
         if(idtCasal == idtCasalComparacao) {
             return this->getTempoChegada() < comparacao.getTempoChegada();
         } else {
