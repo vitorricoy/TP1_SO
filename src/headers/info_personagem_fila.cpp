@@ -12,7 +12,9 @@ InfoPersonagemFila::InfoPersonagemFila() {
 }
 
 void InfoPersonagemFila::setPrioridade(int prioridade) {
-    //cout << this->getCodigo() << " mudou para prioridade " << prioridade << endl;
+    // if(prioridade != getPrioridade()) {
+    //     cout << this->getCodigo() << " mudou para prioridade " << prioridade << endl;
+    // }
     this->nivelPrioridade = prioridade;
 }
 

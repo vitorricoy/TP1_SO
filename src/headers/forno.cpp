@@ -81,37 +81,58 @@ string Forno::verificar() {
             switch(escolhido) {
                 case 0:
                     if(this->personagemFila[Constantes::SHELDON].estaNaFila() && this->personagemFila[Constantes::AMY].estaNaFila()) {
-                        this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
-                        this->personagemFila[Constantes::AMY].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                        this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::DEADLOCK_FILA);
+                        this->personagemFila[Constantes::AMY].setPrioridade(Constantes::DEADLOCK_FILA);
+                        if(this->personagemFila[Constantes::SHELDON].getTempoChegada() < this->personagemFila[Constantes::AMY].getTempoChegada()) {
+                            retorno = Constantes::NOME_SHELDON;
+                        } else {
+                            retorno = Constantes::NOME_AMY;
+                        }
                     } else {
                         if(this->personagemFila[Constantes::SHELDON].estaNaFila()) {
-                            this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                            this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::DEADLOCK_FILA);
+                            retorno = Constantes::NOME_SHELDON;
                         } else {
-                            this->personagemFila[Constantes::AMY].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                            this->personagemFila[Constantes::AMY].setPrioridade(Constantes::DEADLOCK_FILA);
+                            retorno = Constantes::NOME_AMY;
                         }
                     }
                     break;
                 case 1:
                     if(this->personagemFila[Constantes::HOWARD].estaNaFila() && this->personagemFila[Constantes::BERNADETTE].estaNaFila()) {
-                        this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
-                        this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                        this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::DEADLOCK_FILA);
+                        this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::DEADLOCK_FILA);
+                        if(this->personagemFila[Constantes::HOWARD].getTempoChegada() < this->personagemFila[Constantes::BERNADETTE].getTempoChegada()) {
+                            retorno = Constantes::NOME_HOWARD;
+                        } else {
+                            retorno = Constantes::NOME_BERNADETTE;
+                        }
                     } else {
                         if(this->personagemFila[Constantes::HOWARD].estaNaFila()) {
-                            this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                            this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::DEADLOCK_FILA);
+                            retorno = Constantes::NOME_HOWARD;
                         } else {
-                            this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                            this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::DEADLOCK_FILA);
+                            retorno = Constantes::NOME_BERNADETTE;
                         }
                     }
                     break;
                 case 2:
                     if(this->personagemFila[Constantes::LEONARD].estaNaFila() && this->personagemFila[Constantes::PENNY].estaNaFila()) {
-                        this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
-                        this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                        this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::DEADLOCK_FILA);
+                        this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::DEADLOCK_FILA);
+                        if(this->personagemFila[Constantes::LEONARD].getTempoChegada() < this->personagemFila[Constantes::PENNY].getTempoChegada()) {
+                            retorno = Constantes::NOME_LEONARD;
+                        } else {
+                            retorno = Constantes::NOME_PENNY;
+                        }
                     } else {
                         if(this->personagemFila[Constantes::LEONARD].estaNaFila()) {
-                            this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                            this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::DEADLOCK_FILA);
+                            retorno = Constantes::NOME_LEONARD;
                         } else {
-                            this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::CASAL_DEADLOCK_FILA);
+                            this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::DEADLOCK_FILA);
+                            retorno = Constantes::NOME_PENNY;
                         }
                     }
                     break;
@@ -147,6 +168,9 @@ void Forno::atualizarPrioridades() {
         if(!this->personagemFila[I].estaNaFila()) {
             this->personagemFila[I].setPrioridade(Constantes::FORA_FILA);
         } else {
+            if(this->personagemFila[I].getPrioridade() == Constantes::DEADLOCK_FILA) {
+                continue;
+            }
             if(I <= 5) {
                 int idtCasal = I/2;
                 if(this->personagemFila[2*idtCasal].estaNaFila() && this->personagemFila[2*idtCasal+1].estaNaFila()) {
