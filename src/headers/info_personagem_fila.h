@@ -15,8 +15,11 @@ class InfoPersonagemFila {
 
         void entrarNaFila(int tempoChegada); // Entra na fila no tempo especificada
         void sairDaFila(); // Sai da fila
+        void usarForno();
+        void liberarForno();
 
         bool estaNaFila(); // Verifica se está na fila
+        bool estaUsandoForno();
         int getTempoChegada(); // Obtém o tempo de chegada na fila
         int getPrioridade(); // Obtém a prioridade na fila
         int getCodigo();
@@ -27,6 +30,7 @@ class InfoPersonagemFila {
         int tempoChegada;
         int nivelPrioridade;
         bool presenteNaFila;
+        bool usandoForno;
         int codigoPersonagem;
 };
 

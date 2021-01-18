@@ -17,6 +17,8 @@ class Forno {
 
         ~Forno();
 
+        void entrarNaFila(Personagem p);
+
         void esperar(Personagem p);
 
         void liberar(Personagem p);

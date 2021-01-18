@@ -9,7 +9,7 @@ using namespace std;
 
 void esquentar_algo(Personagem p) {
     cout << p.getNome() << " começa a esquentar algo" << endl;
-    sleep(2);
+    sleep(1);
 }
 
 void comer(Personagem p) {
@@ -19,7 +19,7 @@ void comer(Personagem p) {
 
 void trabalhar(Personagem p) {
     cout << p.getNome() << " voltou para o trabalho" << endl;
-    sleep(15);
+    sleep(15+drand48()*6);
 }
 
 int vezes;
@@ -31,6 +31,8 @@ bool ativo;
 void* rotina(void* personagem) {
     Personagem p = *((Personagem*) personagem);
     for(int i=0; i < vezes; i++) {
+        forno.entrarNaFila(p);
+        usleep(300000);
         forno.esperar(p);
         esquentar_algo(p);
         forno.liberar(p);
@@ -74,10 +76,8 @@ int main(int argc, char* argv[]) {
     pthread_t thread_raj;
     pthread_create(&thread_raj, NULL, raj, NULL);
 
-    for (thread = Constantes::NUMERO_PERSONAGENS-1; thread >= 0; thread--) {
+    for (thread = 0; thread < Constantes::NUMERO_PERSONAGENS; thread++) {
         pthread_create(&thread_handles[thread], NULL, rotina, &personagens[thread]);
-        if(thread == Constantes::NUMERO_PERSONAGENS -1)
-            sleep(1);
     }
 
     for (thread = 0; thread < Constantes::NUMERO_PERSONAGENS; thread++) {

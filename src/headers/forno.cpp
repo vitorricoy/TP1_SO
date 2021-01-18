@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <pthread.h>
+#include <unistd.h>
 #include "personagem.h"
 #include "forno.h"
 #include "constantes.h"
@@ -34,10 +35,17 @@ Forno::~Forno() {
     pthread_mutex_destroy(&this->travaForno);
 }
 
-void Forno::esperar(Personagem p) {
+void Forno::entrarNaFila(Personagem p) {
     pthread_mutex_lock(&this->travaForno);
     cout << p.getNome() << " quer usar o forno" << endl;
     this->personagemFila[p.getCodigo()].entrarNaFila(this->contadorEspera++);
+    this->atualizarPrioridades();
+    this->determinarBloqueios();
+    pthread_mutex_unlock(&this->travaForno);
+}
+
+void Forno::esperar(Personagem p) {
+    pthread_mutex_lock(&this->travaForno);
     this->atualizarPrioridades();
     this->determinarBloqueios();
     bool jaEstaLiberado = podeUsar(p.getCodigo());
@@ -46,6 +54,7 @@ void Forno::esperar(Personagem p) {
     }
     emUso = true;
     this->personagemFila[p.getCodigo()].sairDaFila();
+    this->personagemFila[p.getCodigo()].usarForno();
     this->atualizarPrioridades();
     pthread_mutex_unlock(&this->travaForno);
 }
@@ -53,6 +62,7 @@ void Forno::esperar(Personagem p) {
 void Forno::liberar(Personagem p) {
     pthread_mutex_lock(&this->travaForno);
     emUso = false;
+    this->personagemFila[p.getCodigo()].liberarForno();
     this->atualizarPrioridades();
     this->determinarBloqueios();
     pthread_mutex_unlock(&this->travaForno);
@@ -158,7 +168,7 @@ bool Forno::podeUsar(int codigoPersonagem) {
 
 void Forno::atualizarPrioridades() {
     for(int I=0; I<Constantes::NUMERO_CASAIS; I++) {
-        if(this->personagemFila[2*I].estaNaFila() && this->personagemFila[2*I+1].estaNaFila()) {
+        if((this->personagemFila[2*I].estaNaFila() || this->personagemFila[2*I].estaUsandoForno()) && (this->personagemFila[2*I+1].estaNaFila() || this->personagemFila[2*I+1].estaUsandoForno())) {
             if(this->personagemFila[2*I].getPrioridade() < Constantes::CASAL_FILA && this->personagemFila[2*I].getPrioridade() < Constantes::CASAL_FILA) {
                 this->novoCasalFormado = true;
             }
@@ -173,13 +183,14 @@ void Forno::atualizarPrioridades() {
             }
             if(I <= 5) {
                 int idtCasal = I/2;
-                if(this->personagemFila[2*idtCasal].estaNaFila() && this->personagemFila[2*idtCasal+1].estaNaFila()) {
-                    this->personagemFila[2*idtCasal].setPrioridade(Constantes::CASAL_FILA);
-                    this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::CASAL_FILA);
+                if(this->personagemFila[I].getPrioridade() != Constantes::CASAL_FILA && (this->personagemFila[2*idtCasal].estaNaFila() || this->personagemFila[2*idtCasal].estaUsandoForno()) && (this->personagemFila[2*idtCasal+1].estaNaFila() || this->personagemFila[2*idtCasal+1].estaUsandoForno())) {
+                    this->personagemFila[I].setPrioridade(Constantes::CASAL_FILA);
                 } else {
                     if(this->personagemFila[I].getPrioridade() == Constantes::CASAL_FILA) { // Namorado(a) usando forno
-                        if(this->novoCasalFormado) {
-                            this->personagemFila[I].setPrioridade(Constantes::CASAL_DESFEITO_FILA);
+                        if(this->personagemFila[2*idtCasal].estaUsandoForno() || this->personagemFila[2*idtCasal+1].estaUsandoForno()) {
+                            if(this->novoCasalFormado) {
+                                this->personagemFila[I].setPrioridade(Constantes::CASAL_DESFEITO_FILA);
+                            }
                         }
                     } else {
                         this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);

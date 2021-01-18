@@ -9,12 +9,10 @@ InfoPersonagemFila::InfoPersonagemFila() {
     this->tempoChegada = 0;
     this->presenteNaFila = false;
     this->codigoPersonagem = -1;
+    this->usandoForno = false;
 }
 
 void InfoPersonagemFila::setPrioridade(int prioridade) {
-    // if(prioridade != getPrioridade()) {
-    //     cout << this->getCodigo() << " mudou para prioridade " << prioridade << endl;
-    // }
     this->nivelPrioridade = prioridade;
 }
 
@@ -34,6 +32,18 @@ void InfoPersonagemFila::sairDaFila() {
 
 bool InfoPersonagemFila::estaNaFila() {
     return this->presenteNaFila;
+}
+
+bool InfoPersonagemFila::estaUsandoForno() {
+    return this->usandoForno;
+}
+
+void InfoPersonagemFila::usarForno() {
+    this->usandoForno = true;
+}
+
+void InfoPersonagemFila::liberarForno() {
+    this->usandoForno = false;
 }
 
 int InfoPersonagemFila::getTempoChegada() {
