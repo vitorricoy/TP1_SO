@@ -1,8 +1,4 @@
-Espera do forno é algo como
-
-Espera a variavel propria, se liberar pede o forno
-Se negar o forno, espera na variavel propria de novo
-
 O comportamento do personagem deve ser uma função da main e receber a classe como argumento
 
-UM CASAL NAO É FORMADO ENQUANTO UM MEMBRO ESQUENTA ALGO
+Um casal pode ser formado enquanto o membro esquenta algo.
+Um casal é desfeito se é formado um novo casal enquanto um dos membros esquenta algo.
