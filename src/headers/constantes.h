@@ -30,9 +30,8 @@ namespace Constantes {
 
     const int FORA_FILA = 0;
     const int SOZINHO_FILA = 1;
-    const int CASAL_DESFEITO_FILA = 2;
-    const int CASAL_FILA = 3;
-    const int DEADLOCK_FILA = 4;
+    const int CASAL_FILA = 2;
+    const int DEADLOCK_FILA = 3;
 }
 
 

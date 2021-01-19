@@ -185,8 +185,8 @@ void Forno::atualizarPrioridades() {
                 int idtCasal = I/2;
                 if(this->personagemFila[2*idtCasal].estaNaFila() && this->personagemFila[2*idtCasal+1].estaNaFila()) {
                     if((this->personagemFila[2*idtCasal].estaUsandoForno() || this->personagemFila[2*idtCasal].estaUsandoForno()) && novoCasalFormado && this->personagemFila[2*I].getPrioridade() == Constantes::CASAL_FILA && this->personagemFila[2*I].getPrioridade() == Constantes::CASAL_FILA) {
-                        this->personagemFila[2*idtCasal].setPrioridade(Constantes::CASAL_DESFEITO_FILA);
-                        this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::CASAL_DESFEITO_FILA);
+                        this->personagemFila[2*idtCasal].setPrioridade(Constantes::SOZINHO_FILA);
+                        this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::SOZINHO_FILA);
                     } else {
                         this->personagemFila[2*idtCasal].setPrioridade(Constantes::CASAL_FILA);
                         this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::CASAL_FILA);
