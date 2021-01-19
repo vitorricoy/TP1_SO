@@ -36,7 +36,6 @@ class Forno {
         vector<pthread_cond_t> permissoes;
         pthread_mutex_t travaForno;
         vector<InfoPersonagemFila> personagemFila;
-        bool novoCasalFormado;
         int contadorEspera;
         bool emUso;
 };

@@ -19,7 +19,7 @@ void comer(Personagem p) {
 
 void trabalhar(Personagem p) {
     cout << p.getNome() << " voltou para o trabalho" << endl;
-    sleep(15+drand48()*6);
+    sleep(10+drand48()*6);
 }
 
 int vezes;
@@ -31,15 +31,14 @@ bool ativo;
 void* rotina(void* personagem) {
     Personagem p = *((Personagem*) personagem);
     for(int i=0; i < vezes; i++) {
-        forno.entrarNaFila(p);
-        usleep(300000);
-        forno.esperar(p);
+        forno.entrarNaFila(p); // Registra que o personagem quer usar o forno, mas ainda não pode usá-lo de fato
+        usleep(300000); // Sleep para que o personagem não use o forno instantaneamente, caso seja o mais prioritário, permitindo que se tenha deadlocks
+        forno.esperar(p); // Personagem espera o forno estar liberado para usá-lo
         esquentar_algo(p);
         forno.liberar(p);
         comer(p);
         trabalhar(p);
     }
-
     pthread_exit(0);
 }
 
@@ -56,7 +55,8 @@ void* raj(void* arg) {
 }
 
 int main(int argc, char* argv[]) {
-    vezes = atoi(argv[1]);
+    string argumento = argv[1];
+    vezes = stoi(argumento);
 
     long int thread;
     pthread_t thread_handles[Constantes::NUMERO_PERSONAGENS];
@@ -74,19 +74,31 @@ int main(int argc, char* argv[]) {
     ativo = true;
 
     pthread_t thread_raj;
-    pthread_create(&thread_raj, NULL, raj, NULL);
-
-    for (thread = 0; thread < Constantes::NUMERO_PERSONAGENS; thread++) {
-        pthread_create(&thread_handles[thread], NULL, rotina, &personagens[thread]);
+    errno = pthread_create(&thread_raj, NULL, raj, NULL);
+    if(errno) {
+        perror(NULL);
     }
 
     for (thread = 0; thread < Constantes::NUMERO_PERSONAGENS; thread++) {
-        pthread_join(thread_handles[thread], NULL);
+        errno = pthread_create(&thread_handles[thread], NULL, rotina, &personagens[thread]);
+        if(errno) {
+            perror(NULL);
+        }
+    }
+
+    for (thread = 0; thread < Constantes::NUMERO_PERSONAGENS; thread++) {
+        errno = pthread_join(thread_handles[thread], NULL);
+        if(errno) {
+            perror(NULL);
+        }
     }
 
     ativo = false;
 
-    pthread_join(thread_raj, NULL);
+    errno = pthread_join(thread_raj, NULL);
+    if(errno) {
+        perror(NULL);
+    }
 
     return 0;
 }
