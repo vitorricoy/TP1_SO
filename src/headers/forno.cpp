@@ -9,10 +9,6 @@
 
 using namespace std;
 
-struct InformacoesFila {
-    
-};
-
 Forno::Forno(){
     this->permissoes = vector<pthread_cond_t>(Constantes::NUMERO_PERSONAGENS);
     for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {

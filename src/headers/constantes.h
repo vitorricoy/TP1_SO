@@ -6,6 +6,7 @@
 using namespace std;
 
 namespace Constantes {
+    // Códigos dos personagens dentro do sistema
     // Códigos não podem mudar, devido ao tratamento aritmético feito aos casais
     const int SHELDON = 0;
     const int AMY = 1;
@@ -28,6 +29,7 @@ namespace Constantes {
     const string NOME_STUART = "Stuart";
     const string NOME_KRIPKE = "Kripke";
 
+    // Códigos das prioridades superiores definidas no sistema
     const int FORA_FILA = 0;
     const int SOZINHO_FILA = 1;
     const int CASAL_FILA = 2;
