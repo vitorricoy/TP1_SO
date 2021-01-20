@@ -1,321 +1,481 @@
-Howard quer usar o forno
-Amy quer usar o forno
 Penny quer usar o forno
 Stuart quer usar o forno
+Leonard quer usar o forno
 Kripke quer usar o forno
-Sheldon quer usar o forno
-Leonard quer usar o forno
 Bernadette quer usar o forno
-Raj detectou um deadlock, liberando Howard
-Howard começa a esquentar algo
-Howard vai comer
-Bernadette começa a esquentar algo
-Bernadette vai comer
-Penny começa a esquentar algo
-Penny vai comer
-Leonard começa a esquentar algo
-Howard voltou para o trabalho
-Leonard vai comer
-Amy começa a esquentar algo
-Bernadette voltou para o trabalho
-Amy vai comer
-Sheldon começa a esquentar algo
-Penny voltou para o trabalho
-Sheldon vai comer
-Stuart começa a esquentar algo
-Leonard voltou para o trabalho
-Stuart vai comer
-Kripke começa a esquentar algo
-Amy voltou para o trabalho
-Kripke vai comer
-Sheldon voltou para o trabalho
-Stuart voltou para o trabalho
-Kripke voltou para o trabalho
-Bernadette quer usar o forno
-Bernadette começa a esquentar algo
-Bernadette vai comer
 Howard quer usar o forno
-Howard começa a esquentar algo
-Penny quer usar o forno
-Leonard quer usar o forno
-Howard vai comer
-Penny começa a esquentar algo
-Sheldon quer usar o forno
-Penny vai comer
-Leonard começa a esquentar algo
-Bernadette voltou para o trabalho
 Amy quer usar o forno
-Leonard vai comer
-Sheldon começa a esquentar algo
-Stuart quer usar o forno
-Howard voltou para o trabalho
-Sheldon vai comer
+Sheldon quer usar o forno
+Raj detectou um deadlock, liberando Amy
 Amy começa a esquentar algo
-Kripke quer usar o forno
-Penny voltou para o trabalho
 Amy vai comer
-Stuart começa a esquentar algo
-Stuart vai comer
-Kripke começa a esquentar algo
-Leonard voltou para o trabalho
-Kripke vai comer
-Sheldon voltou para o trabalho
-Amy voltou para o trabalho
-Stuart voltou para o trabalho
-Kripke voltou para o trabalho
-Howard quer usar o forno
-Howard começa a esquentar algo
-Howard vai comer
-Bernadette quer usar o forno
+Sheldon começa a esquentar algo
+Sheldon vai comer
 Bernadette começa a esquentar algo
 Bernadette vai comer
-Leonard quer usar o forno
-Penny quer usar o forno
-Howard voltou para o trabalho
-Leonard começa a esquentar algo
-Leonard vai comer
-Penny começa a esquentar algo
-Penny vai comer
-Bernadette voltou para o trabalho
-Stuart quer usar o forno
-Stuart começa a esquentar algo
-Sheldon quer usar o forno
-Stuart vai comer
-Sheldon começa a esquentar algo
-Leonard voltou para o trabalho
-Amy quer usar o forno
-Sheldon vai comer
-Amy começa a esquentar algo
-Penny voltou para o trabalho
-Amy vai comer
-Kripke quer usar o forno
-Kripke começa a esquentar algo
-Stuart voltou para o trabalho
-Sheldon voltou para o trabalho
-Kripke vai comer
-Howard quer usar o forno
-Amy voltou para o trabalho
-Howard começa a esquentar algo
-Howard vai comer
-Kripke voltou para o trabalho
-Howard voltou para o trabalho
-Penny quer usar o forno
-Bernadette quer usar o forno
-Bernadette começa a esquentar algo
-Leonard quer usar o forno
-Sheldon quer usar o forno
-Bernadette vai comer
-Penny começa a esquentar algo
-Penny vai comer
-Leonard começa a esquentar algo
-Leonard vai comer
-Sheldon começa a esquentar algo
-Bernadette voltou para o trabalho
-Sheldon vai comer
-Stuart quer usar o forno
-Amy quer usar o forno
-Amy começa a esquentar algo
-Penny voltou para o trabalho
-Kripke quer usar o forno
-Amy vai comer
-Stuart começa a esquentar algo
-Leonard voltou para o trabalho
-Stuart vai comer
-Kripke começa a esquentar algo
-Sheldon voltou para o trabalho
-Howard quer usar o forno
-Kripke vai comer
 Howard começa a esquentar algo
 Amy voltou para o trabalho
 Howard vai comer
-Stuart voltou para o trabalho
-Kripke voltou para o trabalho
-Bernadette quer usar o forno
-Bernadette começa a esquentar algo
-Howard voltou para o trabalho
-Bernadette vai comer
-Penny quer usar o forno
-Bernadette voltou para o trabalho
 Penny começa a esquentar algo
-Sheldon quer usar o forno
+Sheldon voltou para o trabalho
 Penny vai comer
-Sheldon começa a esquentar algo
-Sheldon vai comer
-Leonard quer usar o forno
 Leonard começa a esquentar algo
-Penny voltou para o trabalho
-Leonard vai comer
-Amy quer usar o forno
-Stuart quer usar o forno
-Amy começa a esquentar algo
-Sheldon voltou para o trabalho
-Amy vai comer
-Stuart começa a esquentar algo
-Howard quer usar o forno
-Stuart vai comer
-Leonard voltou para o trabalho
-Howard começa a esquentar algo
-Kripke quer usar o forno
-Howard vai comer
-Kripke começa a esquentar algo
-Bernadette quer usar o forno
-Amy voltou para o trabalho
-Kripke vai comer
-Bernadette começa a esquentar algo
-Stuart voltou para o trabalho
-Bernadette vai comer
-Howard voltou para o trabalho
-Kripke voltou para o trabalho
-Penny quer usar o forno
-Penny começa a esquentar algo
 Bernadette voltou para o trabalho
-Sheldon quer usar o forno
-Penny vai comer
-Sheldon começa a esquentar algo
-Sheldon vai comer
-Amy quer usar o forno
-Amy começa a esquentar algo
-Penny voltou para o trabalho
-Stuart quer usar o forno
-Amy vai comer
-Stuart começa a esquentar algo
-Sheldon voltou para o trabalho
-Leonard quer usar o forno
-Stuart vai comer
-Leonard começa a esquentar algo
-Kripke quer usar o forno
 Leonard vai comer
-Kripke começa a esquentar algo
-Amy voltou para o trabalho
-Kripke vai comer
-Howard quer usar o forno
-Stuart voltou para o trabalho
-Howard começa a esquentar algo
-Leonard voltou para o trabalho
-Howard vai comer
-Bernadette quer usar o forno
-Kripke voltou para o trabalho
-Bernadette começa a esquentar algo
-Bernadette vai comer
-Howard voltou para o trabalho
-Sheldon quer usar o forno
-Sheldon começa a esquentar algo
-Bernadette voltou para o trabalho
-Sheldon vai comer
-Penny quer usar o forno
-Penny começa a esquentar algo
-Penny vai comer
-Stuart quer usar o forno
-Amy quer usar o forno
-Amy começa a esquentar algo
-Sheldon voltou para o trabalho
-Kripke quer usar o forno
-Amy vai comer
 Stuart começa a esquentar algo
-Penny voltou para o trabalho
-Stuart vai comer
-Kripke começa a esquentar algo
-Kripke vai comer
-Leonard quer usar o forno
-Amy voltou para o trabalho
-Leonard começa a esquentar algo
-Stuart voltou para o trabalho
-Leonard vai comer
-Howard quer usar o forno
-Kripke voltou para o trabalho
-Howard começa a esquentar algo
-Bernadette quer usar o forno
-Howard vai comer
-Bernadette começa a esquentar algo
-Sheldon quer usar o forno
-Leonard voltou para o trabalho
-Bernadette vai comer
-Sheldon começa a esquentar algo
-Sheldon vai comer
 Howard voltou para o trabalho
-Bernadette voltou para o trabalho
-Sheldon voltou para o trabalho
-Amy quer usar o forno
-Penny quer usar o forno
-Stuart quer usar o forno
-Penny começa a esquentar algo
-Penny vai comer
-Amy começa a esquentar algo
-Amy vai comer
-Stuart começa a esquentar algo
-Kripke quer usar o forno
 Stuart vai comer
 Kripke começa a esquentar algo
 Penny voltou para o trabalho
 Kripke vai comer
-Amy voltou para o trabalho
+Leonard voltou para o trabalho
 Stuart voltou para o trabalho
-Bernadette quer usar o forno
 Kripke voltou para o trabalho
-Bernadette começa a esquentar algo
-Leonard quer usar o forno
-Bernadette vai comer
-Leonard começa a esquentar algo
-Howard quer usar o forno
+Amy quer usar o forno
+Amy começa a esquentar algo
+Amy vai comer
 Sheldon quer usar o forno
-Leonard vai comer
 Sheldon começa a esquentar algo
 Sheldon vai comer
-Howard começa a esquentar algo
-Bernadette voltou para o trabalho
-Howard vai comer
-Penny quer usar o forno
-Leonard voltou para o trabalho
-Penny começa a esquentar algo
-Amy quer usar o forno
-Sheldon voltou para o trabalho
-Penny vai comer
-Amy começa a esquentar algo
-Howard voltou para o trabalho
-Amy vai comer
+Bernadette quer usar o forno
+Leonard quer usar o forno
+Bernadette começa a esquentar algo
+Amy voltou para o trabalho
 Stuart quer usar o forno
+Howard quer usar o forno
+Bernadette vai comer
+Howard começa a esquentar algo
+Penny quer usar o forno
+Kripke quer usar o forno
+Sheldon voltou para o trabalho
+Howard vai comer
+Leonard começa a esquentar algo
+Leonard vai comer
+Penny começa a esquentar algo
+Bernadette voltou para o trabalho
+Penny vai comer
+Stuart começa a esquentar algo
+Howard voltou para o trabalho
+Stuart vai comer
+Kripke começa a esquentar algo
+Leonard voltou para o trabalho
+Kripke vai comer
+Penny voltou para o trabalho
+Stuart voltou para o trabalho
+Kripke voltou para o trabalho
+Amy quer usar o forno
+Amy começa a esquentar algo
+Amy vai comer
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Sheldon vai comer
+Amy voltou para o trabalho
+Bernadette quer usar o forno
+Leonard quer usar o forno
+Bernadette começa a esquentar algo
+Howard quer usar o forno
+Sheldon voltou para o trabalho
+Bernadette vai comer
+Howard começa a esquentar algo
+Stuart quer usar o forno
+Howard vai comer
+Leonard começa a esquentar algo
+Leonard vai comer
+Stuart começa a esquentar algo
+Bernadette voltou para o trabalho
+Stuart vai comer
+Penny quer usar o forno
+Kripke quer usar o forno
+Penny começa a esquentar algo
+Howard voltou para o trabalho
+Penny vai comer
+Kripke começa a esquentar algo
+Leonard voltou para o trabalho
+Kripke vai comer
+Stuart voltou para o trabalho
+Penny voltou para o trabalho
+Amy quer usar o forno
+Amy começa a esquentar algo
+Kripke voltou para o trabalho
+Amy vai comer
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Amy voltou para o trabalho
+Sheldon vai comer
+Howard quer usar o forno
+Howard começa a esquentar algo
+Howard vai comer
+Stuart quer usar o forno
+Sheldon voltou para o trabalho
+Stuart começa a esquentar algo
+Bernadette quer usar o forno
+Stuart vai comer
+Bernadette começa a esquentar algo
+Penny quer usar o forno
+Howard voltou para o trabalho
+Bernadette vai comer
+Penny começa a esquentar algo
+Leonard quer usar o forno
+Penny vai comer
+Leonard começa a esquentar algo
+Stuart voltou para o trabalho
+Leonard vai comer
+Kripke quer usar o forno
+Kripke começa a esquentar algo
+Bernadette voltou para o trabalho
+Kripke vai comer
+Penny voltou para o trabalho
+Amy quer usar o forno
+Leonard voltou para o trabalho
+Amy começa a esquentar algo
+Amy vai comer
+Kripke voltou para o trabalho
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Amy voltou para o trabalho
+Sheldon vai comer
+Bernadette quer usar o forno
+Bernadette começa a esquentar algo
+Howard quer usar o forno
+Sheldon voltou para o trabalho
+Bernadette vai comer
+Howard começa a esquentar algo
+Howard vai comer
+Stuart quer usar o forno
+Leonard quer usar o forno
+Leonard começa a esquentar algo
+Penny quer usar o forno
+Bernadette voltou para o trabalho
+Leonard vai comer
+Penny começa a esquentar algo
+Howard voltou para o trabalho
+Penny vai comer
 Stuart começa a esquentar algo
 Kripke quer usar o forno
 Stuart vai comer
-Penny voltou para o trabalho
 Kripke começa a esquentar algo
+Amy quer usar o forno
+Leonard voltou para o trabalho
 Kripke vai comer
-Amy voltou para o trabalho
+Amy começa a esquentar algo
+Penny voltou para o trabalho
+Amy vai comer
 Stuart voltou para o trabalho
 Kripke voltou para o trabalho
+Amy voltou para o trabalho
+Howard quer usar o forno
+Howard começa a esquentar algo
 Sheldon quer usar o forno
-Sheldon começa a esquentar algo
-Leonard quer usar o forno
 Bernadette quer usar o forno
-Sheldon vai comer
+Howard vai comer
 Bernadette começa a esquentar algo
 Bernadette vai comer
-Leonard começa a esquentar algo
-Leonard vai comer
-Howard quer usar o forno
-Amy quer usar o forno
-Sheldon voltou para o trabalho
-Amy começa a esquentar algo
-Bernadette voltou para o trabalho
-Amy vai comer
-Howard começa a esquentar algo
+Sheldon começa a esquentar algo
+Sheldon vai comer
+Howard voltou para o trabalho
 Stuart quer usar o forno
-Leonard voltou para o trabalho
-Howard vai comer
+Kripke quer usar o forno
 Stuart começa a esquentar algo
+Bernadette voltou para o trabalho
 Penny quer usar o forno
 Stuart vai comer
 Penny começa a esquentar algo
-Amy voltou para o trabalho
+Sheldon voltou para o trabalho
+Leonard quer usar o forno
+Amy quer usar o forno
 Penny vai comer
-Howard voltou para o trabalho
+Leonard começa a esquentar algo
+Leonard vai comer
+Amy começa a esquentar algo
 Stuart voltou para o trabalho
-Kripke quer usar o forno
+Amy vai comer
 Kripke começa a esquentar algo
 Penny voltou para o trabalho
 Kripke vai comer
+Leonard voltou para o trabalho
+Howard quer usar o forno
+Amy voltou para o trabalho
+Howard começa a esquentar algo
 Kripke voltou para o trabalho
+Howard vai comer
+Bernadette quer usar o forno
+Bernadette começa a esquentar algo
+Sheldon quer usar o forno
+Bernadette vai comer
+Sheldon começa a esquentar algo
+Howard voltou para o trabalho
+Stuart quer usar o forno
+Sheldon vai comer
+Stuart começa a esquentar algo
+Stuart vai comer
+Bernadette voltou para o trabalho
+Sheldon voltou para o trabalho
+Leonard quer usar o forno
+Penny quer usar o forno
+Leonard começa a esquentar algo
+Stuart voltou para o trabalho
+Amy quer usar o forno
+Leonard vai comer
+Penny começa a esquentar algo
+Penny vai comer
+Amy começa a esquentar algo
+Amy vai comer
+Kripke quer usar o forno
+Leonard voltou para o trabalho
+Kripke começa a esquentar algo
+Kripke vai comer
+Penny voltou para o trabalho
+Amy voltou para o trabalho
+Kripke voltou para o trabalho
+Stuart quer usar o forno
+Howard quer usar o forno
+Howard começa a esquentar algo
+Bernadette quer usar o forno
+Sheldon quer usar o forno
+Howard vai comer
+Bernadette começa a esquentar algo
+Bernadette vai comer
+Sheldon começa a esquentar algo
+Sheldon vai comer
+Stuart começa a esquentar algo
+Howard voltou para o trabalho
+Stuart vai comer
+Bernadette voltou para o trabalho
+Sheldon voltou para o trabalho
+Leonard quer usar o forno
+Penny quer usar o forno
+Leonard começa a esquentar algo
+Stuart voltou para o trabalho
+Kripke quer usar o forno
+Leonard vai comer
+Penny começa a esquentar algo
+Penny vai comer
+Kripke começa a esquentar algo
+Amy quer usar o forno
+Kripke vai comer
+Amy começa a esquentar algo
+Leonard voltou para o trabalho
+Amy vai comer
+Penny voltou para o trabalho
+Kripke voltou para o trabalho
+Amy voltou para o trabalho
+Bernadette quer usar o forno
+Bernadette começa a esquentar algo
+Bernadette vai comer
+Howard quer usar o forno
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Stuart quer usar o forno
+Bernadette voltou para o trabalho
+Sheldon vai comer
+Howard começa a esquentar algo
+Howard vai comer
+Stuart começa a esquentar algo
+Stuart vai comer
+Kripke quer usar o forno
+Penny quer usar o forno
+Penny começa a esquentar algo
+Sheldon voltou para o trabalho
+Leonard quer usar o forno
+Penny vai comer
+Leonard começa a esquentar algo
+Howard voltou para o trabalho
+Leonard vai comer
+Kripke começa a esquentar algo
+Stuart voltou para o trabalho
+Kripke vai comer
+Penny voltou para o trabalho
+Amy quer usar o forno
+Leonard voltou para o trabalho
+Amy começa a esquentar algo
+Bernadette quer usar o forno
+Kripke voltou para o trabalho
+Amy vai comer
+Bernadette começa a esquentar algo
+Bernadette vai comer
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Amy voltou para o trabalho
+Sheldon vai comer
+Howard quer usar o forno
+Howard começa a esquentar algo
+Bernadette voltou para o trabalho
+Stuart quer usar o forno
+Howard vai comer
+Stuart começa a esquentar algo
+Sheldon voltou para o trabalho
+Stuart vai comer
+Penny quer usar o forno
+Penny começa a esquentar algo
+Howard voltou para o trabalho
+Penny vai comer
+Stuart voltou para o trabalho
+Leonard quer usar o forno
+Kripke quer usar o forno
+Leonard começa a esquentar algo
+Penny voltou para o trabalho
+Leonard vai comer
+Kripke começa a esquentar algo
+Kripke vai comer
+Bernadette quer usar o forno
+Bernadette começa a esquentar algo
+Amy quer usar o forno
+Bernadette vai comer
+Amy começa a esquentar algo
+Leonard voltou para o trabalho
+Amy vai comer
+Sheldon quer usar o forno
+Kripke voltou para o trabalho
+Sheldon começa a esquentar algo
+Bernadette voltou para o trabalho
+Sheldon vai comer
+Howard quer usar o forno
+Howard começa a esquentar algo
+Amy voltou para o trabalho
+Howard vai comer
+Sheldon voltou para o trabalho
+Stuart quer usar o forno
+Howard voltou para o trabalho
+Stuart começa a esquentar algo
+Penny quer usar o forno
+Leonard quer usar o forno
+Stuart vai comer
+Penny começa a esquentar algo
+Penny vai comer
+Leonard começa a esquentar algo
+Kripke quer usar o forno
+Leonard vai comer
+Kripke começa a esquentar algo
+Stuart voltou para o trabalho
+Amy quer usar o forno
+Kripke vai comer
+Amy começa a esquentar algo
+Bernadette quer usar o forno
+Penny voltou para o trabalho
+Amy vai comer
+Bernadette começa a esquentar algo
+Leonard voltou para o trabalho
+Bernadette vai comer
+Kripke voltou para o trabalho
+Howard quer usar o forno
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Amy voltou para o trabalho
+Bernadette voltou para o trabalho
+Sheldon vai comer
+Howard começa a esquentar algo
+Howard vai comer
+Stuart quer usar o forno
+Stuart começa a esquentar algo
+Sheldon voltou para o trabalho
+Stuart vai comer
+Howard voltou para o trabalho
+Penny quer usar o forno
+Stuart voltou para o trabalho
+Penny começa a esquentar algo
+Penny vai comer
+Kripke quer usar o forno
 Leonard quer usar o forno
 Leonard começa a esquentar algo
+Bernadette quer usar o forno
+Penny voltou para o trabalho
 Leonard vai comer
+Bernadette começa a esquentar algo
+Amy quer usar o forno
+Bernadette vai comer
+Amy começa a esquentar algo
+Howard quer usar o forno
+Amy vai comer
+Howard começa a esquentar algo
 Leonard voltou para o trabalho
+Howard vai comer
+Kripke começa a esquentar algo
+Bernadette voltou para o trabalho
+Kripke vai comer
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Amy voltou para o trabalho
+Stuart quer usar o forno
+Sheldon vai comer
+Stuart começa a esquentar algo
+Howard voltou para o trabalho
+Stuart vai comer
+Kripke voltou para o trabalho
+Sheldon voltou para o trabalho
+Stuart voltou para o trabalho
+Penny quer usar o forno
+Bernadette quer usar o forno
+Bernadette começa a esquentar algo
+Leonard quer usar o forno
+Bernadette vai comer
+Penny começa a esquentar algo
+Penny vai comer
+Leonard começa a esquentar algo
+Amy quer usar o forno
+Leonard vai comer
+Amy começa a esquentar algo
+Howard quer usar o forno
+Amy vai comer
+Bernadette voltou para o trabalho
+Howard começa a esquentar algo
+Penny voltou para o trabalho
+Howard vai comer
+Leonard voltou para o trabalho
+Stuart quer usar o forno
+Kripke quer usar o forno
+Stuart começa a esquentar algo
+Amy voltou para o trabalho
+Stuart vai comer
+Kripke começa a esquentar algo
+Howard voltou para o trabalho
+Kripke vai comer
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Sheldon vai comer
+Stuart voltou para o trabalho
+Kripke voltou para o trabalho
+Bernadette quer usar o forno
+Bernadette começa a esquentar algo
+Sheldon voltou para o trabalho
+Bernadette vai comer
+Leonard quer usar o forno
+Leonard começa a esquentar algo
+Penny quer usar o forno
+Howard quer usar o forno
+Leonard vai comer
+Penny começa a esquentar algo
+Bernadette voltou para o trabalho
+Amy quer usar o forno
+Penny vai comer
+Amy começa a esquentar algo
+Amy vai comer
+Howard começa a esquentar algo
+Leonard voltou para o trabalho
+Howard vai comer
+Penny voltou para o trabalho
+Sheldon quer usar o forno
+Sheldon começa a esquentar algo
+Amy voltou para o trabalho
+Stuart quer usar o forno
+Sheldon vai comer
+Stuart começa a esquentar algo
+Howard voltou para o trabalho
+Kripke quer usar o forno
+Stuart vai comer
+Kripke começa a esquentar algo
+Kripke vai comer
+Sheldon voltou para o trabalho
+Stuart voltou para o trabalho
+Kripke voltou para o trabalho
+Leonard quer usar o forno
+Penny quer usar o forno
+Leonard começa a esquentar algo
+Leonard vai comer
+Penny começa a esquentar algo
+Penny vai comer
+Leonard voltou para o trabalho
+Penny voltou para o trabalho
+Kripke quer usar o forno
+Kripke começa a esquentar algo
+Kripke vai comer
+Kripke voltou para o trabalho
