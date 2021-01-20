@@ -30,6 +30,7 @@ namespace Constantes {
     const string NOME_KRIPKE = "Kripke";
 
     // Códigos das prioridades superiores definidas no sistema
+    // Devem ter a ordenação de acordo com a prioridade (maior valor, maior prioridade)
     const int FORA_FILA = 0;
     const int SOZINHO_FILA = 1;
     const int CASAL_FILA = 2;
