@@ -215,6 +215,8 @@ void Forno::atualizarPrioridades() {
                         this->personagemFila[2*idtCasal].setPrioridade(Constantes::CASAL_FILA);
                         this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::CASAL_FILA);
                     }
+                } else { // Personagem está sozinho na fila
+                    this->personagemFila[2*idtCasal].setPrioridade(Constantes::SOZINHO_FILA);
                 }
             } else { // Kripke e Stuart possuem apenas as prioridades de fora da fila ou sozinho na fila
                 this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);
