@@ -6,6 +6,7 @@
 using namespace std;
 
 namespace Constantes {
+    // Códigos não podem mudar, devido ao tratamento aritmético feito aos casais
     const int SHELDON = 0;
     const int AMY = 1;
     const int HOWARD = 2;
@@ -16,6 +17,7 @@ namespace Constantes {
     const int KRIPKE = 7;
 
     const int NUMERO_PERSONAGENS = 8;
+    const int NUMERO_CASAIS = 3;
 
     const string NOME_SHELDON = "Sheldon";
     const string NOME_AMY = "Amy";
@@ -25,6 +27,11 @@ namespace Constantes {
     const string NOME_PENNY = "Penny";
     const string NOME_STUART = "Stuart";
     const string NOME_KRIPKE = "Kripke";
+
+    const int FORA_FILA = 0;
+    const int SOZINHO_FILA = 1;
+    const int CASAL_FILA = 2;
+    const int DEADLOCK_FILA = 3;
 }
 
 
