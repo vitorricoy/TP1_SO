@@ -1,6 +1,7 @@
 #include <iostream>
 #include <pthread.h>
 #include <unistd.h>
+#include <ctime>
 #include "headers/forno.h"
 #include "headers/personagem.h"
 #include "headers/constantes.h"
@@ -19,7 +20,7 @@ void comer(Personagem p) {
 
 void trabalhar(Personagem p) {
     cout << p.getNome() << " voltou para o trabalho" << endl;
-    sleep(10+drand48()*6); // Tempo que o personagem fica no trabalho (De 10 a 15 segundos)
+    sleep(8+drand48()*6); // Tempo que o personagem fica no trabalho (De 8 a 13 segundos)
 }
 
 int vezes; // Número de vezes que os personagens devem usar o forno
@@ -61,6 +62,9 @@ int main(int argc, char* argv[]) {
     // Recebe o número de vezes que os personagens usarão o forno por argumento
     string argumento = argv[1];
     vezes = stoi(argumento);
+
+    //Inicializa a seed para aleatoriedade
+    srand48(time(nullptr));
 
     // Declara o vetor de threads dos personagems
     pthread_t thread_handles[Constantes::NUMERO_PERSONAGENS];
