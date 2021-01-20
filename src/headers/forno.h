@@ -18,7 +18,7 @@ class Forno {
         void entrarNaFila(Personagem p); // Indica que um personagem entrou na fila
         void esperar(Personagem p); // Indica que um personagem está esperando para usar o forno
         void liberar(Personagem p); // Libera o personagem que estava usando o forno
-        string verificar(); // Verifica que se existe deadlock, e caso exista, os resolve
+        void verificar(); // Verifica que se existe deadlock, e caso exista, os resolve
     
     private:
         // Determina se um personagem está bloqueado por outro, e caso não esteja, sinaliza que ele pode usar o forno

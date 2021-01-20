@@ -49,10 +49,7 @@ void* rotina(void* personagem) {
 void* raj(void* arg) {
     while(ativo) { // Executa enquanto existir um personagem que pode usar o forno
         sleep(5); // Espera um tempo para verificar o deadlock
-        string liberado = forno.verificar(); // Verifica se existe deadlock, e caso exista, o resolve
-        if(!liberado.empty()) { // Se a rotina de verificação de deadlocks liberou alguém, imprime a mensagem
-            cout << "Raj detectou um deadlock, liberando " << liberado << endl;
-        }
+        forno.verificar(); // Verifica se existe deadlock, e caso exista, o resolve
     }
     // Encerra a thread do Raj
     pthread_exit(0);

@@ -60,12 +60,12 @@ int InfoPersonagemFila::getCodigo() {
 }
 
 bool InfoPersonagemFila::temMaisPrioridade(InfoPersonagemFila comparacao) {
-    // Se a prioridade superior do outro personagem for maior, tenho menos prioridade
-    if(comparacao.getPrioridade() > this->getPrioridade()) {
+    // Se a prioridade superior do outro personagem for maior, ou se eu não estiver na fila, tenho menos prioridade
+    if(!this->estaNaFila() || comparacao.getPrioridade() > this->getPrioridade()) {
         return false;
     }
-    // Se a minha prioridade superior for maior, tenho mais prioridade
-    if(this->getPrioridade() > comparacao.getPrioridade()) {
+    // Se a minha prioridade superior for maior, ou o outro personagem não estiver na fila, tenho mais prioridade
+    if(!comparacao.estaNaFila() || this->getPrioridade() > comparacao.getPrioridade()) {
         return true;
     }
     // Se eu sou o Kripke ou Stuart e o outro personagem é um membro de casal, tenho menos prioridade

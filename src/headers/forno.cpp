@@ -79,11 +79,8 @@ bool Forno::filaVazia() {
     return true; // A fila está vazia
 }
 
-string Forno::verificar() {
+void Forno::verificar() {
     pthread_mutex_lock(&this->travaForno); // Obtém a trava do monito
-    // Variável que contém o nome do personagem liberado do deadlock, ou vazio, caso não exista deadlock
-    string retorno = "";
-
     // Se existem personagens na fila e o forno não está sendo usado
     if(!this->filaVazia() && !this->emUso) {
         // Verifica se alguém pode usar o forno no momento (não existe deadlock)
@@ -95,6 +92,7 @@ string Forno::verificar() {
         if(!alguemPodeUsar) {
             // Escolhe um personagem dos três mais prioritários aleatoriamente
             int escolhido = drand48()*3;
+            string saida;
             switch(escolhido) {
                 case 0:
                     // Define se o casal está na fila, ou apenas um indivíduo, para liberá-los corretamente
@@ -103,17 +101,17 @@ string Forno::verificar() {
                         this->personagemFila[Constantes::AMY].setPrioridade(Constantes::DEADLOCK_FILA);
                         // Determina, caso se tenha um casal, qual membro é mais prioritário
                         if(this->personagemFila[Constantes::SHELDON].getTempoChegada() < this->personagemFila[Constantes::AMY].getTempoChegada()) {
-                            retorno = Constantes::NOME_SHELDON;
+                            saida = Constantes::NOME_SHELDON;
                         } else {
-                            retorno = Constantes::NOME_AMY;
+                            saida = Constantes::NOME_AMY;
                         }
                     } else {
                         if(this->personagemFila[Constantes::SHELDON].estaNaFila()) { // Apenas o Sheldon está na fila
                             this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::DEADLOCK_FILA);
-                            retorno = Constantes::NOME_SHELDON;
+                            saida = Constantes::NOME_SHELDON;
                         } else { // Apenas a Amy está na fila
                             this->personagemFila[Constantes::AMY].setPrioridade(Constantes::DEADLOCK_FILA);
-                            retorno = Constantes::NOME_AMY;
+                            saida = Constantes::NOME_AMY;
                         }
                     }
                     break;
@@ -124,17 +122,17 @@ string Forno::verificar() {
                         this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::DEADLOCK_FILA);
                         // Determina, caso se tenha um casal, qual membro é mais prioritário
                         if(this->personagemFila[Constantes::HOWARD].getTempoChegada() < this->personagemFila[Constantes::BERNADETTE].getTempoChegada()) {
-                            retorno = Constantes::NOME_HOWARD;
+                            saida = Constantes::NOME_HOWARD;
                         } else {
-                            retorno = Constantes::NOME_BERNADETTE;
+                            saida = Constantes::NOME_BERNADETTE;
                         }
                     } else {
                         if(this->personagemFila[Constantes::HOWARD].estaNaFila()) { // Apenas o Howard está na fila
                             this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::DEADLOCK_FILA);
-                            retorno = Constantes::NOME_HOWARD;
+                            saida = Constantes::NOME_HOWARD;
                         } else { // Apenas a Bernadette está na fila
                             this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::DEADLOCK_FILA);
-                            retorno = Constantes::NOME_BERNADETTE;
+                            saida = Constantes::NOME_BERNADETTE;
                         }
                     }
                     break;
@@ -145,26 +143,26 @@ string Forno::verificar() {
                         this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::DEADLOCK_FILA);
                         // Determina, caso se tenha um casal, qual membro é mais prioritário
                         if(this->personagemFila[Constantes::LEONARD].getTempoChegada() < this->personagemFila[Constantes::PENNY].getTempoChegada()) {
-                            retorno = Constantes::NOME_LEONARD;
+                            saida = Constantes::NOME_LEONARD;
                         } else {
-                            retorno = Constantes::NOME_PENNY;
+                            saida = Constantes::NOME_PENNY;
                         }
                     } else {
                         if(this->personagemFila[Constantes::LEONARD].estaNaFila()) { // Apenas o Leonard está na fila
                             this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::DEADLOCK_FILA);
-                            retorno = Constantes::NOME_LEONARD;
+                            saida = Constantes::NOME_LEONARD;
                         } else { // Apenas a Penny está na fila
                             this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::DEADLOCK_FILA);
-                            retorno = Constantes::NOME_PENNY;
+                            saida = Constantes::NOME_PENNY;
                         }
                     }
                     break;
             }
+            cout << "Raj detectou um deadlock, liberando " << saida << endl; // Imprime a mensagem de personagem liberado
             this->determinarBloqueios(); // Libera os personagens selecionados pelo tratamento do deadlock
         }
     }
     pthread_mutex_unlock(&this->travaForno); // Libera a trava do monito
-    return retorno; // Retorna o personagem liberado, ou vazio, caso não tenha ocorido deadlock
 }
 
 bool Forno::podeUsar(int codigoPersonagem) {
@@ -208,7 +206,7 @@ void Forno::atualizarPrioridades() {
                     if((this->personagemFila[2*idtCasal].estaUsandoForno() || this->personagemFila[2*idtCasal].estaUsandoForno()) && novoCasalFormado && 
                        this->personagemFila[2*I].getPrioridade() == Constantes::CASAL_FILA && this->personagemFila[2*I].getPrioridade() == Constantes::CASAL_FILA) {
                         
-                        // Define que o casal foi desfeito (o novo casal formado terá prioridade para usar o forno)   
+                        // Define que o casal foi desfeito (o novo casal formado terá prioridade para usar o forno)
                         this->personagemFila[2*idtCasal].setPrioridade(Constantes::SOZINHO_FILA);
                         this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::SOZINHO_FILA);
                     } else { // O casal ganha ou continua com a prioridade de casal
@@ -216,7 +214,9 @@ void Forno::atualizarPrioridades() {
                         this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::CASAL_FILA);
                     }
                 } else { // Personagem está sozinho na fila
-                    this->personagemFila[2*idtCasal].setPrioridade(Constantes::SOZINHO_FILA);
+                    if(this->personagemFila[I].getPrioridade() < Constantes::CASAL_FILA) { // Se o personagem não é um membro de um casal que está usando o forno
+                        this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);
+                    }
                 }
             } else { // Kripke e Stuart possuem apenas as prioridades de fora da fila ou sozinho na fila
                 this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);
