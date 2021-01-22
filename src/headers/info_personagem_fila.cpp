@@ -93,7 +93,8 @@ bool InfoPersonagemFila::temMaisPrioridade(InfoPersonagemFila comparacao) {
     if(this->getCodigo() <= 5 && comparacao.getCodigo() <= 5) {
         int idtCasal = this->getCodigo()/2; // Identificador do meu casal
         int idtCasalComparacao = comparacao.getCodigo()/2; // Indentificador do casal do outro personagem
-        if(idtCasal == idtCasalComparacao) { // Se somos membros do mesmo casal
+        if(idtCasal == idtCasalComparacao) { 
+            // Se somos membros do mesmo casal
             // Quem chegou primeiro tem mais prioridade
             return this->getTempoChegada() < comparacao.getTempoChegada();
         } else {

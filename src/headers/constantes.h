@@ -7,7 +7,7 @@ using namespace std;
 
 namespace Constantes {
     // Códigos dos personagens dentro do sistema
-    // Códigos não podem mudar, devido ao tratamento aritmético feito aos casais
+    // Códigos não podem mudar, devido ao tratamento aritmético feito aos casais e à ordem relativa deles
     const int SHELDON = 0;
     const int AMY = 1;
     const int HOWARD = 2;

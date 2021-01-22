@@ -25,7 +25,7 @@ Forno::Forno() {
 }
 
 Forno::~Forno() {
-    // Executa as funções que destõem as variáveis da biblioteca pthread
+    // Executa as funções que destrõem as variáveis da biblioteca pthread
     for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
         pthread_cond_destroy(&this->permissoes[I]);
     }
@@ -43,7 +43,7 @@ void Forno::entrarNaFila(Personagem p) {
 }
 
 void Forno::esperar(Personagem p) {
-    pthread_mutex_lock(&this->travaForno); // Obtém a trava do monito
+    pthread_mutex_lock(&this->travaForno); // Obtém a trava do monitor
     this->atualizarPrioridades(); // Atualiza as prioridades após a alteração da fila
     this->determinarBloqueios(); // Verifica se algum personagem pode usar o forno após essa alteração
     bool jaEstaLiberado = podeUsar(p.getCodigo()); // Verifica se o personagem já pode usar o forno
@@ -55,11 +55,11 @@ void Forno::esperar(Personagem p) {
     this->personagemFila[p.getCodigo()].usarForno();
 
     this->atualizarPrioridades(); // Atualiza as prioridades após a alteração da fila
-    pthread_mutex_unlock(&this->travaForno); // Libera a trava do monito
+    pthread_mutex_unlock(&this->travaForno); // Libera a trava do monitor
 }
 
 void Forno::liberar(Personagem p) {
-    pthread_mutex_lock(&this->travaForno); // Obtém a trava do monito
+    pthread_mutex_lock(&this->travaForno); // Obtém a trava do monitor
     // Define que o personagem não está mais usando o forno
     emUso = false;
     this->personagemFila[p.getCodigo()].liberarForno();
@@ -70,7 +70,7 @@ void Forno::liberar(Personagem p) {
     // Imprime a mensagem de que a pessoa foi comer
     // Isso é feito dentro do forno para evitar de alguém começar a esquentar antes da pessoa ir comer
     cout << p.getNome() << " vai comer" << endl; 
-    pthread_mutex_unlock(&this->travaForno); // Libera a trava do monito
+    pthread_mutex_unlock(&this->travaForno); // Libera a trava do monitor
 }
 
 bool Forno::filaVazia() {
@@ -83,7 +83,7 @@ bool Forno::filaVazia() {
 }
 
 void Forno::verificar() {
-    pthread_mutex_lock(&this->travaForno); // Obtém a trava do monito
+    pthread_mutex_lock(&this->travaForno); // Obtém a trava do monitor
     // Se existem personagens na fila e o forno não está sendo usado
     if(!this->filaVazia() && !this->emUso) {
         // Verifica se alguém pode usar o forno no momento (não existe deadlock)
@@ -94,78 +94,48 @@ void Forno::verificar() {
         // Se existem personagens na fila e ninguém pode usar, existe um deadlock
         if(!alguemPodeUsar) {
             // Escolhe um personagem dos três mais prioritários aleatoriamente
-            int escolhido = drand48()*3;
-            string saida;
-            switch(escolhido) {
-                case 0:
-                    // Define se o casal está na fila, ou apenas um indivíduo, para liberá-los corretamente
-                    if(this->personagemFila[Constantes::SHELDON].estaNaFila() && this->personagemFila[Constantes::AMY].estaNaFila()) {
-                        this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::DEADLOCK_FILA);
-                        this->personagemFila[Constantes::AMY].setPrioridade(Constantes::DEADLOCK_FILA);
-                        // Determina, caso se tenha um casal, qual membro é mais prioritário
-                        if(this->personagemFila[Constantes::SHELDON].getTempoChegada() < this->personagemFila[Constantes::AMY].getTempoChegada()) {
-                            saida = Constantes::NOME_SHELDON;
-                        } else {
-                            saida = Constantes::NOME_AMY;
-                        }
-                    } else {
-                        if(this->personagemFila[Constantes::SHELDON].estaNaFila()) { // Apenas o Sheldon está na fila
-                            this->personagemFila[Constantes::SHELDON].setPrioridade(Constantes::DEADLOCK_FILA);
-                            saida = Constantes::NOME_SHELDON;
-                        } else { // Apenas a Amy está na fila
-                            this->personagemFila[Constantes::AMY].setPrioridade(Constantes::DEADLOCK_FILA);
-                            saida = Constantes::NOME_AMY;
-                        }
-                    }
-                    break;
-                case 1:
-                    // Define se o casal está na fila, ou apenas um indivíduo, para liberá-los corretamente
-                    if(this->personagemFila[Constantes::HOWARD].estaNaFila() && this->personagemFila[Constantes::BERNADETTE].estaNaFila()) {
-                        this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::DEADLOCK_FILA);
-                        this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::DEADLOCK_FILA);
-                        // Determina, caso se tenha um casal, qual membro é mais prioritário
-                        if(this->personagemFila[Constantes::HOWARD].getTempoChegada() < this->personagemFila[Constantes::BERNADETTE].getTempoChegada()) {
-                            saida = Constantes::NOME_HOWARD;
-                        } else {
-                            saida = Constantes::NOME_BERNADETTE;
-                        }
-                    } else {
-                        if(this->personagemFila[Constantes::HOWARD].estaNaFila()) { // Apenas o Howard está na fila
-                            this->personagemFila[Constantes::HOWARD].setPrioridade(Constantes::DEADLOCK_FILA);
-                            saida = Constantes::NOME_HOWARD;
-                        } else { // Apenas a Bernadette está na fila
-                            this->personagemFila[Constantes::BERNADETTE].setPrioridade(Constantes::DEADLOCK_FILA);
-                            saida = Constantes::NOME_BERNADETTE;
-                        }
-                    }
-                    break;
-                case 2:
-                    // Define se o casal está na fila, ou apenas um indivíduo, para liberá-los corretamente
-                    if(this->personagemFila[Constantes::LEONARD].estaNaFila() && this->personagemFila[Constantes::PENNY].estaNaFila()) {
-                        this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::DEADLOCK_FILA);
-                        this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::DEADLOCK_FILA);
-                        // Determina, caso se tenha um casal, qual membro é mais prioritário
-                        if(this->personagemFila[Constantes::LEONARD].getTempoChegada() < this->personagemFila[Constantes::PENNY].getTempoChegada()) {
-                            saida = Constantes::NOME_LEONARD;
-                        } else {
-                            saida = Constantes::NOME_PENNY;
-                        }
-                    } else {
-                        if(this->personagemFila[Constantes::LEONARD].estaNaFila()) { // Apenas o Leonard está na fila
-                            this->personagemFila[Constantes::LEONARD].setPrioridade(Constantes::DEADLOCK_FILA);
-                            saida = Constantes::NOME_LEONARD;
-                        } else { // Apenas a Penny está na fila
-                            this->personagemFila[Constantes::PENNY].setPrioridade(Constantes::DEADLOCK_FILA);
-                            saida = Constantes::NOME_PENNY;
-                        }
-                    }
-                    break;
+            int casalEscolhido = drand48()*3;
+            string saida, nomeMembro1, nomeMembro2;
+
+            // Guarda o nome do casal sorteado para a saída de quem foi liberado
+            if(casalEscolhido == 0) {
+                nomeMembro1 = Constantes::NOME_SHELDON; 
+                nomeMembro2 = Constantes::NOME_AMY; 
+            } else {
+                if(casalEscolhido == 1) {
+                    nomeMembro1 = Constantes::NOME_HOWARD; 
+                    nomeMembro2 = Constantes::NOME_BERNADETTE;
+                } else {
+                    nomeMembro1 = Constantes::NOME_LEONARD; 
+                    nomeMembro2 = Constantes::NOME_PENNY;
+                }
+            }
+            // Define se o casal está na fila, ou apenas um indivíduo, para liberá-los corretamente
+            if(this->personagemFila[2*casalEscolhido].estaNaFila() && this->personagemFila[2*casalEscolhido+1].estaNaFila()) {
+                this->personagemFila[2*casalEscolhido].setPrioridade(Constantes::DEADLOCK_FILA);
+                this->personagemFila[2*casalEscolhido+1].setPrioridade(Constantes::DEADLOCK_FILA);
+                // Determina, caso se tenha um casal, qual membro é mais prioritário
+                if(this->personagemFila[2*casalEscolhido].getTempoChegada() < this->personagemFila[2*casalEscolhido+1].getTempoChegada()) {
+                    saida = nomeMembro1;
+                } else {
+                    saida = nomeMembro2;
+                }
+            } else {
+                if(this->personagemFila[2*casalEscolhido].estaNaFila()) { 
+                    // Apenas o primeiro membro está na fila
+                    this->personagemFila[2*casalEscolhido].setPrioridade(Constantes::DEADLOCK_FILA);
+                    saida = nomeMembro1;
+                } else { 
+                    // Apenas o segundo membro está na fila
+                    this->personagemFila[2*casalEscolhido+1].setPrioridade(Constantes::DEADLOCK_FILA);
+                    saida = nomeMembro2;
+                }
             }
             cout << "Raj detectou um deadlock, liberando " << saida << endl; // Imprime a mensagem de personagem liberado
             this->determinarBloqueios(); // Libera os personagens selecionados pelo tratamento do deadlock
         }
     }
-    pthread_mutex_unlock(&this->travaForno); // Libera a trava do monito
+    pthread_mutex_unlock(&this->travaForno); // Libera a trava do monitor
 }
 
 bool Forno::podeUsar(int codigoPersonagem) {
