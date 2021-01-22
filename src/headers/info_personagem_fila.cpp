@@ -11,6 +11,7 @@ InfoPersonagemFila::InfoPersonagemFila() {
     this->presenteNaFila = false;
     this->codigoPersonagem = -1;
     this->usandoForno = false;
+    this->casalDesfeito = false;
 }
 
 void InfoPersonagemFila::setPrioridade(int prioridade) {
@@ -31,6 +32,10 @@ void InfoPersonagemFila::sairDaFila() {
     this->nivelPrioridade = Constantes::FORA_FILA;
 }
 
+bool InfoPersonagemFila::casalFoiDesfeito() {
+    return this->casalDesfeito;
+}
+
 bool InfoPersonagemFila::estaNaFila() {
     return this->presenteNaFila;
 }
@@ -45,6 +50,10 @@ void InfoPersonagemFila::usarForno() {
 
 void InfoPersonagemFila::liberarForno() {
     this->usandoForno = false;
+}
+
+void InfoPersonagemFila::setCasalDesfeito(bool casalDesfeito) {
+    this->casalDesfeito = casalDesfeito;
 }
 
 int InfoPersonagemFila::getTempoChegada() {

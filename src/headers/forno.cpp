@@ -67,6 +67,9 @@ void Forno::liberar(Personagem p) {
 
     this->atualizarPrioridades(); // Atualiza as prioridades após a alteração da fila
     this->determinarBloqueios(); // Verifica se algum personagem pode usar o forno após essa alteração
+    // Imprime a mensagem de que a pessoa foi comer
+    // Isso é feito dentro do forno para evitar de alguém começar a esquentar antes da pessoa ir comer
+    cout << p.getNome() << " vai comer" << endl; 
     pthread_mutex_unlock(&this->travaForno); // Libera a trava do monito
 }
 
@@ -183,38 +186,48 @@ void Forno::atualizarPrioridades() {
     for(int I=0; I<Constantes::NUMERO_CASAIS; I++) {
         if(this->personagemFila[2*I].estaNaFila() && this->personagemFila[2*I+1].estaNaFila()) { // Se os dois membros do casal estão na fila
             // Se a prioridade dos membros não é de casal
-            if(this->personagemFila[2*I].getPrioridade() < Constantes::CASAL_FILA && this->personagemFila[2*I].getPrioridade() < Constantes::CASAL_FILA) {
+            if(this->personagemFila[2*I].getPrioridade() < Constantes::CASAL_FILA || this->personagemFila[2*I+1].getPrioridade() < Constantes::CASAL_FILA) {
                 // Um novo casal foi formado após a última mudança
                 novoCasalFormado = true;
             }
         }
     }
-
     // Calcula as mudanças de prioridade de cada personagem
     for(int I=0; I<Constantes::NUMERO_PERSONAGENS; I++) {
         if(!this->personagemFila[I].estaNaFila()) { // Personagem fora da fila
             this->personagemFila[I].setPrioridade(Constantes::FORA_FILA);
+            if(I <= 5) { // O personagem é membro de casal
+                int idtCasal = I/2;
+                // Define que caso esse casal tenha sido desfeito, ele pode ser refeito, já que um dos membros já deixou a fila
+                this->personagemFila[idtCasal].setCasalDesfeito(false);
+                this->personagemFila[idtCasal+1].setCasalDesfeito(false);
+            }
         } else { // Personagem presente na fila
-            if(this->personagemFila[I].getPrioridade() == Constantes::DEADLOCK_FILA) { // Personagem foi liberado para resolver deadlock
+            // Personagem foi liberado para resolver deadlock ou está usando o forno, logo não precisa atualizar prioridades
+            if(this->personagemFila[I].getPrioridade() == Constantes::DEADLOCK_FILA || this->personagemFila[I].estaUsandoForno()) {
                 continue;
             }
             if(I <= 5) { // O personagem é membro de algum casal
                 int idtCasal = I/2; // Identificador do casal do qual o personagem é membro
                 // Se ambos os membros do casal estão na fila
-                if(this->personagemFila[2*idtCasal].estaNaFila() && this->personagemFila[2*idtCasal+1].estaNaFila()) { 
+                if(this->personagemFila[2*idtCasal].estaNaFila() && this->personagemFila[2*idtCasal+1].estaNaFila()) {
                     //Se um membro do casal está usando o forno e foi formado um novo casal diferente do que está usando o forno
-                    if((this->personagemFila[2*idtCasal].estaUsandoForno() || this->personagemFila[2*idtCasal].estaUsandoForno()) && novoCasalFormado && 
-                       this->personagemFila[2*I].getPrioridade() == Constantes::CASAL_FILA && this->personagemFila[2*I].getPrioridade() == Constantes::CASAL_FILA) {
+                    if((this->personagemFila[2*idtCasal].estaUsandoForno() || this->personagemFila[2*idtCasal+1].estaUsandoForno()) && novoCasalFormado && 
+                       this->personagemFila[2*idtCasal].getPrioridade() == Constantes::CASAL_FILA && this->personagemFila[2*idtCasal+1].getPrioridade() == Constantes::CASAL_FILA) {
                         
                         // Define que o casal foi desfeito (o novo casal formado terá prioridade para usar o forno)
-                        this->personagemFila[2*idtCasal].setPrioridade(Constantes::SOZINHO_FILA);
-                        this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::SOZINHO_FILA);
-                    } else { // O casal ganha ou continua com a prioridade de casal
-                        this->personagemFila[2*idtCasal].setPrioridade(Constantes::CASAL_FILA);
-                        this->personagemFila[2*idtCasal+1].setPrioridade(Constantes::CASAL_FILA);
+                        this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);
+                        // Variável de controle que não permite que esse casal seja refeito até que o outro membro termine de usar o forno e reentre na fila
+                        this->personagemFila[I].setCasalDesfeito(true); 
+                    } else { // O casal não foi desfeito no momento
+                        if(!this->personagemFila[I].casalFoiDesfeito()) { // Verifica se o casal já foi desfeito
+                            // Se o casal não foi desfeito, pode ganhar a prioridade de casal
+                            this->personagemFila[I].setPrioridade(Constantes::CASAL_FILA);
+                        }
                     }
                 } else { // Personagem está sozinho na fila
-                    if(this->personagemFila[I].getPrioridade() < Constantes::CASAL_FILA) { // Se o personagem não é um membro de um casal que está usando o forno
+                    // Se tinha um casal, o outro membro deve usar em seguida, logo mantém a prioridade de casal para ele
+                    if(this->personagemFila[I].getPrioridade() < Constantes::CASAL_FILA) { 
                         this->personagemFila[I].setPrioridade(Constantes::SOZINHO_FILA);
                     }
                 }

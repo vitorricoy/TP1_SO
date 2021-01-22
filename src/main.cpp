@@ -8,13 +8,12 @@
 
 using namespace std;
 
-void esquentar_algo(Personagem p) {
+void esquentarAlgo(Personagem p) {
     cout << p.getNome() << " começa a esquentar algo" << endl;
     sleep(1); // Tempo que demora para esquentar a comida no forno
 }
 
-void comer(Personagem p) {
-    cout << p.getNome() << " vai comer" << endl;
+void comer(Personagem p) { // Mensagem é impressa dentro do monitor para evitar prints confusos
     sleep(3); // Tempo que o personagem demora para comer
 }
 
@@ -37,7 +36,7 @@ void* rotina(void* personagem) {
         forno.entrarNaFila(p); // Registra que o personagem quer usar o forno, mas ainda não pode usá-lo de fato
         usleep(300000); // Sleep para que o personagem não use o forno instantaneamente, caso seja o mais prioritário, permitindo que se tenha deadlocks
         forno.esperar(p); // Personagem espera o forno estar liberado para usá-lo
-        esquentar_algo(p);
+        esquentarAlgo(p);
         forno.liberar(p);
         comer(p);
         trabalhar(p);
@@ -86,7 +85,7 @@ int main(int argc, char* argv[]) {
     if(errno) { // Verifica se houve erro
         perror(NULL);
     }
-
+    
     //Cria as threads dos personagens
     for(int thread = 0; thread < Constantes::NUMERO_PERSONAGENS; thread++) {
         errno = pthread_create(&thread_handles[thread], NULL, rotina, &personagens[thread]);

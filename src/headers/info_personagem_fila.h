@@ -19,8 +19,10 @@ class InfoPersonagemFila {
         void sairDaFila(); // Determina que o personagem saiu da fila
         void usarForno(); // Determina que o personagem está usando o forno
         void liberarForno(); // Determina que o personagem liberou o forno
+        void setCasalDesfeito(bool casalDesfeito); // Determina que o casal foi desfeito
 
         bool estaNaFila(); // Verifica se o personagem está na fila
+        bool casalFoiDesfeito(); // Verifica se o casal foi desfeito
         bool estaUsandoForno(); // Verifica se o personagem está usando o forno
         int getTempoChegada(); // Obtém o tempo de chegada do personagem na fila
         int getPrioridade(); // Obtém a prioridade do personagem na fila
@@ -37,6 +39,7 @@ class InfoPersonagemFila {
         bool presenteNaFila; // Flag para indicar se o personagem está na fila
         bool usandoForno; // Flag para indicar se o personagem está usando o forno
         int codigoPersonagem; // Código do personagem
+        bool casalDesfeito; // Flag para indicar se o casal do personagem foi desfeito
 };
 
 #endif //TRABALHO_PRATICO_SO_SRC_HEADERS_INFO_PERSONAGEM_FILA_H
